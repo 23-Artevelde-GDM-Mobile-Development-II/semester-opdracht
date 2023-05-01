@@ -1,0 +1,14 @@
+.likeBtn{
+    /* padding: 1em; */
+    background-color: #ffffff;
+    border-radius: 100%;
+    cursor: pointer;
+    border: none;
+    width: 3rem;
+    height: 3rem;
+    font-size: larger;
+}
+
+.likeBtn i{
+    color: #3B97DC;
+}

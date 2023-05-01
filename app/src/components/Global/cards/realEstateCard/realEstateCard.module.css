@@ -1,0 +1,65 @@
+.card{
+    min-width: fit-content;
+    box-shadow: 8px 8px 6px -3px rgba(87,87,87,0.28);
+    border-radius: 1em;
+}
+
+.card a{ 
+    text-decoration: none;
+}
+
+.imgContainer{
+    height: 15em;
+    width: 100%;
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 1em 1em 0 0;
+}
+
+.price{
+    position: absolute;
+    bottom: -1em;
+    left: 0;
+    padding: 1em 3em;
+    background-color: #5FD4D8;
+    border-radius: 0 1em 0 0;
+    color: white;
+    font-weight: 600;
+}
+
+.houseInfo{
+    padding: 1em;
+}
+
+.houseInfo .location{
+    margin-bottom: 2em;
+}
+
+.houseInfo .location p+p{
+    margin-top: 0;
+}
+
+.icons{
+    display: flex;
+    justify-content: space-between;
+    color: rgb(151, 151, 151);
+}
+
+.icon{
+    margin-right: 0.5em;
+}
+
+.editRemoveBtnPosition{
+    max-width: fit-content;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+}
+
+.likeBtnPosition{
+    position: absolute;
+    top: 1em;
+    right: 1em;
+}

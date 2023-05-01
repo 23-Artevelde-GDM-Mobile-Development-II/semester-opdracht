@@ -1,0 +1,47 @@
+.container{
+    display: flex;
+    gap: 1em;
+    background-color: white;
+    border-radius: 1em;
+    border-width: 2px;
+    width: fit-content;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+.btn{
+    font-size: large;
+    transition: 5ms;
+    background-color: white;
+    border: none;
+    min-width: 1.5rem;
+    cursor: pointer;
+}
+
+.editBtn i{
+    color: #3B97DC;
+}
+
+.editBtn:hover{
+    font-size: larger;
+}
+.editBtn:hover i{
+    color: #1295f8;
+}
+
+
+.deleteBtn i{
+    color: rgb(162, 76, 76);
+}
+
+.deleteBtn:hover{
+    font-size: larger;
+}
+
+.deleteBtn:hover i{
+    color: rgb(220, 70, 70);
+}
+
+.verticalLine{
+    border-left: 2px solid rgb(213, 213, 213);
+}
