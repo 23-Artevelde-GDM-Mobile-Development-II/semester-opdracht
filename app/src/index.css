@@ -19,3 +19,12 @@ h1, h2, h3, h4, h5, h6{
 p, label, span, div, i{
   color: rgb(95, 95, 95);
 }
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}

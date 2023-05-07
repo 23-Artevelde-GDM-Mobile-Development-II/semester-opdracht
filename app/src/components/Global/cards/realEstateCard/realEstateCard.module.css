@@ -1,7 +1,26 @@
 .card{
     min-width: fit-content;
-    box-shadow: 8px 8px 6px -3px rgba(87,87,87,0.28);
-    border-radius: 1em;
+    /* box-shadow: 8px 8px 6px -3px rgba(87,87,87,0.28); */
+    border: 2px solid rgba(236, 236, 236, 0.66);
+    box-sizing: border-box;
+    border-radius: 1rem;
+}
+
+.infoCardTop{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.infoCardTop .epcIconLabel{
+    fill: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.typeRealEstate{
+    color: #536DFE;
 }
 
 .card a{ 
@@ -15,40 +34,54 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    border-radius: 1em 1em 0 0;
+    border-radius: 0.9rem 0.9rem 0 0;
 }
 
-.price{
+/* .price{
     position: absolute;
     bottom: -1em;
     left: 0;
     padding: 1em 3em;
     background-color: #5FD4D8;
-    border-radius: 0 1em 0 0;
+    border-radius: 0 0.5rem 0 0;
     color: white;
     font-weight: 600;
-}
+} */
 
 .houseInfo{
-    padding: 1em;
+    padding: 1em 2em;
+}
+
+.price{
+    font-weight: 400;
+    color: #3F3F3F;
+    margin-top: 0;
+    font-size: 24px;
 }
 
 .houseInfo .location{
     margin-bottom: 2em;
 }
 
-.houseInfo .location p+p{
-    margin-top: 0;
+.houseInfo .location p{
+    margin: 0;
+    color: #A2A2A2;
 }
+
 
 .icons{
     display: flex;
-    justify-content: space-between;
-    color: rgb(151, 151, 151);
+    gap: 3rem;
 }
 
-.icon{
-    margin-right: 0.5em;
+.icons div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icons div p, .icons div span{
+    color: rgb(115, 115, 115);
 }
 
 .editRemoveBtnPosition{

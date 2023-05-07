@@ -2,11 +2,10 @@
     display: flex;
     gap: 1em;
     background-color: white;
-    border-radius: 1em;
+    border-radius: 5px;
     border-width: 2px;
     width: fit-content;
     padding: 1em;
-    border-radius: 1em;
 }
 
 .btn{

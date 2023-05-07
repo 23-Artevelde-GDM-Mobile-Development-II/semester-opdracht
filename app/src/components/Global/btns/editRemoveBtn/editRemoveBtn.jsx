@@ -15,9 +15,9 @@ function EditRemoveBtn({removeOnly=false, handleClickEdit, handleClickDelete}) {
             }
             
 
-            <buttton className={`${styles.btn} ${styles.deleteBtn}`} click={handleClickDelete}>
+            <button className={`${styles.btn} ${styles.deleteBtn}`} click={handleClickDelete}>
                 <i className="fa-solid fa-trash-can"></i>
-            </buttton>
+            </button>
         
         </div>
     );

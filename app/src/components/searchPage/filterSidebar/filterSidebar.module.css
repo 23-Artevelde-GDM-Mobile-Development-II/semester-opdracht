@@ -17,19 +17,6 @@
 }
 
 
-
-
-
-.contentToggle .checkboxMain i, .contentToggle .checkboxMain input{
-    margin-right: 1rem;
-    display: inline-block;
-    margin-bottom: 0.5rem;
-}
-
-.contentToggle .checkboxMain .subContent{
-    margin-left: 3.5rem;
-}
-
 .toggleOpen{
     display: block;
 }

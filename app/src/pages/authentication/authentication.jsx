@@ -13,7 +13,6 @@ const Authentication = () => {
         <div className={`${style.wrap}`}>
             <Router>
                 <Header />
-                    
                     <Routes>
                         <Route path={ROUTES.home} element={<Home />}/>
                         <Route path={ROUTES.searchRealEstate} element={<SearchRealEstate/>} />

@@ -1,0 +1,13 @@
+.primaryBtn{
+    background-color: #536DFE;
+    padding: 0.5em 1em;
+    color: white;
+    border-radius: 2em;
+    text-decoration: none;
+    transition: 200ms;
+}
+
+.primaryBtn:hover{
+    background-color: #2e49e1;
+    font-weight: 600;
+}
