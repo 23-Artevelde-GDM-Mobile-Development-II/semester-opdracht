@@ -39,28 +39,18 @@ function RealEstateCard({realEstateData, isLiked, handleClickDelete, handleClick
       <div className={styles.imgContainer} style={{backgroundImage: `url(${realEstateData.imgUrl})`}}>
 
         {
-            (() => {
-              if (userStatus)
-                return (
-                    <div className={styles.likeBtnPosition}>
-                        <LikeBtn/>
-                    </div>
-                )
-              else
-                return (
-                    <div className={styles.editRemoveBtnPosition}>
-                        <EditRemoveBtn handleClickDelete={handleClickDelete} handleClickEdit={handleClickEdit}/>
-                    </div>
-                
-              )
-          })()
-        }
 
-        
-        
-        
-{/* 
-        <p className={styles.price}>€ {realEstateData.price}</p> */}
+          userStatus ?  
+            <div className={styles.likeBtnPosition}>
+              <LikeBtn/>
+            </div>
+
+            :
+
+            <div className={styles.editRemoveBtnPosition}>
+              <EditRemoveBtn handleClickDelete={handleClickDelete} handleClickEdit={handleClickEdit}/>
+            </div>
+        }
       </div>
 
       <Link to={`/gebouw/${realEstateData.propertyId}`}>

@@ -1,3 +1,31 @@
 .header {
+    display: flex;
+    justify-content: space-between;
+    align-Items: center;
+    padding: 1em 5%;
+    background-color: white;
+    border-bottom: 1px solid rgb(231, 231, 231);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    box-sizing: border-box;
+    z-index: 10;
+}
 
+nav ul{
+    display: flex;
+    gap: 3rem;
+}
+
+nav ul li{
+    list-style: none;
+}
+
+header a{
+    text-decoration: none;
+    color: rgb(32, 32, 32);
+}
+
+header a:hover{
+    font-weight: 500;
 }

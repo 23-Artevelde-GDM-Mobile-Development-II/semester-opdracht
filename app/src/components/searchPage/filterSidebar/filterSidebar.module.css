@@ -13,14 +13,9 @@
 }
 
 .headingToggle div h3{
-    margin-bottom: 0;
+    margin: 0;
 }
 
-
-.toggleOpen{
-    display: block;
-}
-
-.toggleClosed{
-    display: none;
+.contentToggle{
+    margin-bottom: 2rem;
 }

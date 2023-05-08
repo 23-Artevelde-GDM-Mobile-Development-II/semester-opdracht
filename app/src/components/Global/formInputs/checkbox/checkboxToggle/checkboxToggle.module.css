@@ -1,0 +1,9 @@
+.checkboxMain i, .checkboxMain input{
+    margin-right: 1rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.checkboxMain .subContent{
+    margin-left: 3.5rem;
+}

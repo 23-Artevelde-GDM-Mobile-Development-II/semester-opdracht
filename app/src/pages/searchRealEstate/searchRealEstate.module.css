@@ -20,6 +20,8 @@
 
 
 
+
+
 .contentToggle .checkboxMain i, .contentToggle .checkboxMain input{
     margin-right: 1rem;
     display: inline-block;
@@ -36,4 +38,50 @@
 
 .toggleClosed{
     display: none;
+}
+
+
+.pageContainer{
+    margin: 2em 8%;
+    padding-top: 8em;
+}
+
+aside{
+    display: none;
+}
+
+.sort{
+    padding: 0.5rem 1rem;
+    border-radius: 0.8rem;
+    background-color: #F1F1F1;
+    border: 2px solid #E0E0E0;
+    outline: none;
+}
+
+.justifyBetween{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+
+
+
+@media only screen and (min-width: 650px) {
+    .pageContainer{
+        display: flex;
+        gap: 5em;
+        margin: 2em 5%;
+
+    }
+    
+    aside{
+        display: block;
+        width: 20%;
+    }
+    
+    main{
+        width: 70%;
+    }
 }

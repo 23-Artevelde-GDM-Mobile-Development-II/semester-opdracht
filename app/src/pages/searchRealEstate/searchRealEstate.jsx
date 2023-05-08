@@ -4,10 +4,21 @@ import RealEstateCard from '../../components/Global/cards/realEstateCard/realEst
 
 import styles from './searchRealEstate.module.css';
 import FilterSidebar from '../../components/searchPage/filterSidebar/filterSidebar';
+import CheckboxToggle from '../../components/Global/formInputs/checkbox/checkboxToggle/checkboxToggle';
 
 function SearchRealEstate(props) {
 
 
+    // const [toggleFilterOptions, setToggleFilterOptions] = useState({
+    //     realEstateType: false,
+    //     buildingType: false,
+    //     location: false,
+    //     price: false,
+    //     acreage: false,
+    //     rooms: false,
+    //     outside: false,
+    //     energie: false
+    // })
     const [toggleFilterOptions, setToggleFilterOptions] = useState({
         realEstateType: false,
         buildingType: false,
@@ -19,20 +30,28 @@ function SearchRealEstate(props) {
         energie: false
     })
 
+    // const [toggleMainCheckboxes, setToggleMainCheckboxes] = useState({
+    //     house: false,
+    //     appartement: false,
+    //     test: false
+    // })
 
-    function changeToggleFilterOptions(optionName) {
-        setToggleFilterOptions(()=>(
-            {
-                ...toggleFilterOptions,
-                [optionName]: !(toggleFilterOptions[optionName])
-            }
-        ));
 
-    }
+    // function changeToggleFilterOptions(optionName) {
+    //     setToggleFilterOptions(()=>(
+    //         {
+    //             ...toggleFilterOptions,
+    //             [optionName]: !(toggleFilterOptions[optionName])
+    //         }
+    //     ));
+
+    // }
 
     return (
-        <div>
-            <div>
+        <div className={styles.pageContainer}>
+
+            {/* SIDEBAR WITH FILTERS */}
+            <aside>
                 <h2>Zoekcriteria</h2>
 
                 <div className={styles.switch}>
@@ -41,7 +60,7 @@ function SearchRealEstate(props) {
                 </div>
 
                 <div>
-                    <FilterSidebar filterNameValue={toggleFilterOptions.realEstateType} filterNameDutch={'Type pand'} toggleFunction={()=> changeToggleFilterOptions('realEstateType')}>
+                    <FilterSidebar filterNameDutch={'Type pand'}>
 
                     <div className={styles.checkboxMain}>
                             <i className="fa-solid fa-chevron-right"></i>
@@ -70,6 +89,14 @@ function SearchRealEstate(props) {
                                 </div>
                             </div>
                         </div>
+
+                        <CheckboxToggle 
+                        labelName={'Test'}
+                        inputName={'test'}
+                        >
+                            <input type="checkbox" name={`kpop`} id={`kpop`} />
+                            <label htmlFor={`kpop`}>KPOP</label>
+                        </CheckboxToggle>
 
                         <div className={styles.checkboxMain}>
                             <i className="fa-solid fa-chevron-right"></i>
@@ -102,29 +129,29 @@ function SearchRealEstate(props) {
                     </FilterSidebar>
 
 
-                    <FilterSidebar filterNameValue={toggleFilterOptions.buildingType} filterNameDutch={'Type bebouwing'} toggleFunction={()=> changeToggleFilterOptions('buildingType')}>
+                    <FilterSidebar filterNameDutch={'Type bebouwing'}>
                     <p>Zie je dit + kun je dit togglen??</p>
                 </FilterSidebar>
                 </div>
 
-            </div>
+            </aside>
 
-            <div>
+            {/* MAIN CONTENT */}
+            <main>
                 <h1>Dit is zoekpagina</h1>
 
-                <div className={`mt-[92px] md:mt-[68px] items-center justify-between md:block`}>
+                <div className={styles.justifyBetween}>
 
                     {/* FILTER ICON FOR MOBILE*/}
-                    <button>
+                    {/* <button>
                         <i className="fa-solid fa-filter md:hidden cursor-pointer bg-mint-green text-white p-5 m-8 rounded-full"></i>
-                    </button>
+                    </button> */}
 
+                    <p>42 resultaten</p>
 
                     {/* ORDER BY */}
                     <div className="m-8 md:mt-[8.5em] w-max ml-auto">
-                        <label htmlFor="sort">Sorteer op:</label>
-
-                        <select name="sort" id="sort" className="bg-cyan-100 p-2 ml-4 rounded-lg outline-cyan-300" onChange={''}>
+                        <select name="sort" id="sort" className={styles.sort} onChange={''}>
                             <option value="id-DESC">Meest recente eerst</option>
                             <option value="id-ASC">Oudste eerst</option>
                             <option value="price-ASC">Goedkoopste eerst</option>
@@ -209,7 +236,7 @@ function SearchRealEstate(props) {
                     </GridCards>
                 </div>
             
-            </div>
+            </main>
         </div>
     );
 }
