@@ -6,6 +6,7 @@ import Footer from "../../components/Global/footer/footer";
 import NotFound from "../notFound/notFound";
 import Home from "../home/home";
 import SearchRealEstate from "../searchRealEstate/searchRealEstate";
+import RealEstateDetail from "../realEstateDetail/realEstateDetail";
 
 const Authentication = () => {
 
@@ -16,6 +17,7 @@ const Authentication = () => {
                     <Routes>
                         <Route path={ROUTES.home} element={<Home />}/>
                         <Route path={ROUTES.searchRealEstate} element={<SearchRealEstate/>} />
+                        <Route path={ROUTES.realEstateDetail} element={<RealEstateDetail/>} />
                         <Route path='*' element={<NotFound/>} />
                     </Routes>
 
