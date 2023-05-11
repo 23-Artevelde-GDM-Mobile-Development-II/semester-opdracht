@@ -1,8 +1,40 @@
-.img-gallery{
+.imgGallery{
     border-radius: 2em;
     min-height: 400px;
     position: relative;
     width: 100%;
+}
+
+.overlayLeft, .overlayRight{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8em;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(35,35,35);
+}
+
+.overlayLeft button, .overlayRight button{
+  background: none;
+  border: none;
+}
+
+.overlayLeft button i, .overlayRight button i{
+  font-size: x-large;
+  color: white;
+}
+
+.overlayRight{
+  right: 0;
+  background: linear-gradient(-90deg, rgb(22, 22, 22, 1) 0%, rgba(22,22,22,0) 100%);
+}
+
+.overlayLeft{
+  left: 0;
+  background: linear-gradient(90deg, rgb(22, 22, 22, 1) 0%, rgba(22,22,22,0) 100%);
 }
 
 .hidden{
