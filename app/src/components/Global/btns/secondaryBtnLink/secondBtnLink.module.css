@@ -1,7 +1,7 @@
 .secondaryBtn{
     padding: 0.5em 1em;
     color: #2e49e1;
-    border-radius: 2em;
+    border-radius: 0.5rem;
     text-decoration: none;
     transition: 200ms;
     border: 1px solid #2e49e1;

@@ -1,0 +1,35 @@
+.popup{
+    padding: 2em;
+    border-radius: 1em;
+    border: none;
+    max-height: 500px;
+    max-width: 500px;
+}
+
+.popup::backdrop{
+    background-color: rgba(26, 26, 26, 0.853);
+}
+
+.closeBtn{
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    margin-bottom: 2em;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.closeBtn i{
+    font-size: x-large;
+    transition: 300ms;
+}
+
+.closeBtn i:hover{
+    color: #536DFE;
+}
+
+.title{
+    margin-top: 1em;
+}
+

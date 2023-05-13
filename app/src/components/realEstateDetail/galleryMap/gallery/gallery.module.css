@@ -1,8 +1,9 @@
 .imgGallery{
     border-radius: 2em;
-    min-height: 400px;
+    /* min-height: 400px; */
     position: relative;
     width: 100%;
+    background-color: #3a3b3eda;
 }
 
 .overlayLeft, .overlayRight{
@@ -30,22 +31,26 @@
 .overlayRight{
   right: 0;
   background: linear-gradient(-90deg, rgb(22, 22, 22, 1) 0%, rgba(22,22,22,0) 100%);
+  border-radius: 0 1em 1em 0;
 }
 
 .overlayLeft{
   left: 0;
   background: linear-gradient(90deg, rgb(22, 22, 22, 1) 0%, rgba(22,22,22,0) 100%);
+  border-radius: 1em 0 0 1em;
 }
 
 .hidden{
     display: none;
 }
 
-img{
+.imgGallery img{
     width: 100%;
-    min-height: 400px;
-    object-fit: cover;
-    border-radius: 2em;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 1em;
+    height: 45vh;
 }
 
 @media only screen and (max-width: 600px) {

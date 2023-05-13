@@ -1,0 +1,47 @@
+
+.messageIsSend img{
+    width: 40%;
+    margin: 0 auto;
+    display: block;
+    margin-top: 2em;
+}
+
+.message{
+    padding: 1em;
+    background-color: #F1F1F1;
+    border: 1px solid #E0E0E0;
+    outline: none;
+    border-radius: 0.5rem;
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+    min-height: 200px;
+    margin-top: 2em;
+}
+
+.message:focus{
+    outline: 2px solid #c4c4c4;
+}
+
+
+.btnPosition{
+    display: flex;
+    justify-content: end;
+    margin-top: 2em;
+}
+
+.sendBtn{
+    background-color: #536DFE;
+    padding: 0.5em 1em;
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: 200ms;
+    border: none;
+    margin-left: auto;
+}
+
+.sendBtn:hover{
+    background-color: #2e49e1;
+    font-weight: 600;
+}

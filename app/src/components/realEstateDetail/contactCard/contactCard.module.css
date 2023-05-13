@@ -1,0 +1,136 @@
+.contactCard{
+    background-color: white;
+    padding: 2em;
+    border: 1px solid #CECECE;
+    border-radius: 1rem;
+    height: 35vh;
+    overflow-y: scroll;
+    /* position: fixed; */
+}
+
+.justifyBetween{
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+}
+
+/* Agency info */
+
+.justifyBetween .agnecyImgContainer{
+    width: 35%;
+    max-height: 150px;
+    min-width: 80px;
+}
+
+.justifyBetween .agnecyImgContainer img{
+    width: 100%;
+    object-fit: contain;
+}
+
+.cardEstateAgencyInfo h3{
+    margin-top: 0;
+}
+
+.cardEstateAgencyInfo p{
+    margin: 0;
+}
+
+.cardEstateAgencyInfo p:last-of-type{
+    margin-bottom: 2em;
+}
+
+.cardEstateAgencyInfo .secondaryBtn{
+    padding: 0.5em 1em;
+    color: #2e49e1;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: 200ms;
+    border: 1px solid #2e49e1;
+    
+}
+
+.cardEstateAgencyInfo .secondaryBtn:hover{
+    background-color: #dedefe;
+    font-weight: 600;
+    
+}
+
+.contactCard hr{
+    border: 1px solid #EBEBEB;
+    margin-top: 3em;
+}
+
+
+/* Info contactperson */
+
+.contactCard .contactPerson{
+    background-color: #E7E9F4;
+    padding: 1em;
+    border-radius: 1rem;
+}
+
+.contactCard .contactPerson img{
+    display: block;
+    width: 30%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.contactPerson .name{
+    color: rgb(31, 31, 31);
+    margin: 0;
+}
+
+/* Contact buttons */
+
+.contactPerson .contactBtns{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid #536dfe2a;
+    padding-left: 1em;
+}
+
+.contactBtns .btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #536DFE;
+    width: 2rem;
+    height: 2rem;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.contactBtns .btn:hover{
+    background-color: #dedefe;
+    border: 2px solid #536DFE;
+}
+
+.contactBtns .btn i{
+    color: #536DFE;
+}
+
+/* Logged out */
+
+.contactCard .loggedOutMessage{
+    background-color: #E9F5FF;
+    display: flex;
+    gap: 2em;
+    align-items: center;
+    padding: 1em;
+    border-left: 4px solid #79ADE8;
+    margin-top: 2em;
+}
+
+.contactCard .loggedOutMessage p, 
+.contactCard .loggedOutMessage i{
+    margin: 0;
+    color: #79ADE8;
+}
+
+.contactCard .loggedOutMessage i{
+    font-size: x-large;
+}

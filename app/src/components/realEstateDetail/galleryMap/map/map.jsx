@@ -47,7 +47,7 @@ function Map({address, children}) {
   return (
     
     <div className={styles}>
-        <div ref={mapContainer} className="map-container h-[400px] rounded-xl" />
+        <div ref={styles.mapContainer} className="map-container h-[400px] rounded-xl" />
         {children}
     </div>
     

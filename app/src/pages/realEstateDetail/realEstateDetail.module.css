@@ -2,15 +2,24 @@
     display: flex;
     justify-content: space-between;
     position: fixed;
-    width: 100%;
+    width: 80%;
     top: 6.5em;
-    padding: 1;
-    padding: 1em 10%;
+    padding: 1.5em 10%;
     margin: 0 auto;
     background-color: #a0a6c8b2;
     backdrop-filter: blur(30px);
     z-index: 10;
+
 }
+
+.realEstateHeader button i{
+    color: #536DFE;
+}
+
+.realEstateHeader h2{
+    margin: 0;
+}
+
 
 .realEstateHeader h2, .realEstateHeader p, .realEstateHeader i {
     color: white;
@@ -21,3 +30,89 @@
     align-items: center;
     gap: 1em;
 }
+
+/* Containers */
+
+.mainContainer{
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 17em auto 2em auto;
+    position: relative;
+}
+
+.leftContainer{
+    width: 65%;
+}
+.rightContainer{
+    width: 30%;
+    position: fixed;
+    right: 4%;
+}
+
+.specsShortlist{
+    background-color: #e7e9f4cc;
+    padding: 2em;
+    display: flex;
+    gap: 3rem;
+    border-radius: 1em;
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
+.specsShortlist div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.description{
+    margin-bottom: 4em;
+}
+
+.specificationsContainer{
+    background-color: white;
+    border: 1px solid #D2D2D2;
+    border-radius: 1rem;
+    padding: 1em 2em;
+    display: flex;
+    gap: 12rem;
+    margin-bottom: 4em;
+}
+
+.specificationsContainer .titles{
+    font-weight: bold;
+}
+
+.estateAgencyInfo{
+    display: flex;
+    gap: 4em;
+    margin-top: 2em;
+}
+
+.estateAgencyInfo img{
+    width: 30%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 1rem;
+}
+
+.estateAgencyInfo div{
+    width: 60%;
+}
+
+.estateAgencyInfo div h3{
+    margin-top: 0;
+}
+
+/* Location agency */
+.estateAgencyInfo p:first-of-type, .estateAgencyInfo p:first-of-type i{
+    color: rgb(160, 160, 160);
+    /* font-weight: lighter; */
+}
+
+.estateAgencyInfo p:first-of-type i{
+    margin-right: 0.5em;
+}
+
+
