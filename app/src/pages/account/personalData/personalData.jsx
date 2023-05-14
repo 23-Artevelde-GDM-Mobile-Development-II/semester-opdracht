@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import ROUTES from '../../../consts/routes';
 import DashboardAccountSidebar from '../../../components/Global/sidabars/dashboardAccountSidebar/dashboardAccountSidebar';
 import styles from './personalData.module.css';
 import InputWithLabel from '../../../components/Global/formInputs/input/inputWithLabel/inputWithLabel';
+import SIDEBAR_NAV_ITEMS from '../../../consts/sidebarNavItems';
 
 
 function PersonalData() {
@@ -31,7 +31,7 @@ function PersonalData() {
         <div className={styles.container}>
             <div className={styles.sidebar}>
                 <DashboardAccountSidebar 
-                navItems={[['Persoonlijke gegevens', ROUTES.account.personalData], ['Favorieten', ROUTES.account.favorites], ['Berichten', ROUTES.account.messages], ['Uitloggen', ROUTES.account.logOut]]}
+                navItems={SIDEBAR_NAV_ITEMS.account}
                 
                 activeItem={'Persoonlijke gegevens'}/>
 

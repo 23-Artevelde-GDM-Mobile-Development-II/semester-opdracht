@@ -5,11 +5,23 @@ const ROUTES = {
     realEstateDetail: "/panden/5",
     // account routes are for normal users
     account: {
-      personalData: '/account/account-edit',
-      favorites: '/account/favorites',
+      personalData: '/account/account-bijwerken',
+      favorites: '/account/favorieten',
       messages: '/account/berichten',
       logOut: '/account/logout'
+    },
+    dashboard:{
+      agency: {
+        realEstate: '/dashboard/panden',
+        messages: '/dashboard/berichten',
+        employees: '/dashboard/wernemers',
+        agencyData: '/immokantoor-gegevens-bijwerken'
+      },
+      admin: {
+
+      }
     }
+
   };
   
   export default ROUTES;

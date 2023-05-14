@@ -40,9 +40,9 @@ function RealEstateCard({realEstateData, isLiked, handleClickDelete, handleClick
 
         {
 
-          userStatus ?  
+          userStatus === 'regular user' ?  
             <div className={styles.likeBtnPosition}>
-              <LikeBtn/>
+              <LikeBtn liked={isLiked}/>
             </div>
 
             :
@@ -50,14 +50,21 @@ function RealEstateCard({realEstateData, isLiked, handleClickDelete, handleClick
             <div className={styles.editRemoveBtnPosition}>
               <EditRemoveBtn handleClickDelete={handleClickDelete} handleClickEdit={handleClickEdit}/>
             </div>
-        }
+          }
       </div>
 
       <Link to={`/gebouw/${realEstateData.propertyId}`}>
         <div className={styles.houseInfo}>
 
           <div className={styles.infoCardTop}>
-            <p className={styles.typeRealEstate}>{realEstateData.type} {realEstateData.sellingMethode}</p>
+            <p className={styles.typeRealEstate}>
+              {
+                userStatus !== 'regular user' && isLoggedIn && 
+
+                <span title={realEstateData.isPublished ? 'Gepubliceerd': 'Nog niet gepubliceerd'} className={realEstateData.isPublished ? styles.published: styles.notPublished}></span>
+              }
+              {realEstateData.type} {realEstateData.sellingMethode}
+              </p>
 
             <svg width={82} height={20} viewBox="0 0 82 20" xmlns="http://www.w3.org/2000/svg">
               <title> EPC-label {realEstateData.epcLabel}</title>
@@ -112,12 +119,11 @@ function RealEstateCard({realEstateData, isLiked, handleClickDelete, handleClick
           </div>
 
         </div>
-        {userStatus === false && realEstateData.unavailable === true ? 
+
+        {userStatus !== 'regular user' && realEstateData.unavailable === true &&
           <div className="bg-red-400 p-4 rounded-b-lg">
             <p className="uppercase font-semibold text-white text-center">Verkocht</p>
           </div> 
-          : 
-          <></>
         }
       </Link>
     </div>

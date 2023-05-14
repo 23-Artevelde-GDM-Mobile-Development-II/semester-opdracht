@@ -10,6 +10,7 @@ import RealEstateDetail from "../realEstateDetail/realEstateDetail";
 import PersonalData from "../account/personalData/personalData";
 import Favorites from "../account/favorites/favorites";
 import Messages from "../account/messages/messages";
+import UpdateRealEstates from "../dashboard/agency/updateRealEstates/updateRealEstates";
 
 const Authentication = () => {
 
@@ -18,12 +19,22 @@ const Authentication = () => {
             <Router>
                 <Header />
                     <Routes>
+                        {/* Routes for regular users */}
                         <Route path={ROUTES.home} element={<Home />}/>
                         <Route path={ROUTES.searchRealEstate} element={<SearchRealEstate/>} />
                         <Route path={ROUTES.realEstateDetail} element={<RealEstateDetail/>} />
                         <Route path={ROUTES.account.personalData} element={<PersonalData/>} />
                         <Route path={ROUTES.account.favorites} element={<Favorites/>} />
-                        <Route path={ROUTES.account.messages} element={<Messages/>} />
+                        <Route path={ROUTES.account.messages} element={<Messages userStatus={'regular user'}/>} />
+
+                        {/* Routes for real estate agents */}
+
+                        {/* I need to check in this file if the logged in user is allowed to acces these routes, if that's not the case they should be rederected to a page with a 403 error */}
+
+                        <Route path={ROUTES.dashboard.agency.realEstate} element={<UpdateRealEstates userStatus={'agent'}/>} />
+                        <Route path={ROUTES.dashboard.agency.messages} element={<Messages userStatus={'agent'}/>} />
+
+
 
                         <Route path='*' element={<NotFound/>} />
                     </Routes>

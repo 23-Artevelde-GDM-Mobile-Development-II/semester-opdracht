@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import DashboardAccountSidebar from '../../../components/Global/sidabars/dashboardAccountSidebar/dashboardAccountSidebar';
 import styles from './messages.module.css';
-import ROUTES from '../../../consts/routes';
 import AllMessagesList from '../../../components/Global/tables/message/allMessagesList';
 import Message from '../../../components/Global/sidabars/message/message';
+import SIDEBAR_NAV_ITEMS from '../../../consts/sidebarNavItems';
 
-function Messages() {
+function Messages({userStatus}) {
     const [allMessages, setAllMessages] = useState([
         {
             sender: {
@@ -17,7 +17,6 @@ function Messages() {
             message: {
                 messageText: 'Dit is een 1ste bericht.',
                 date: '',
-                open: false,
                 read: false
             },
             realEstate: {
@@ -45,7 +44,6 @@ function Messages() {
             message: {
                 messageText: '',
                 date: '',
-                open: false,
                 read: false
             },
             realEstate: {
@@ -74,9 +72,9 @@ function Messages() {
     return (
         <div className={styles.container}>
             <div className={styles.sidebar}>
+            
                 <DashboardAccountSidebar
-                navItems={[['Persoonlijke gegevens', ROUTES.account.personalData], ['Favorieten', ROUTES.account.favorites], ['Berichten', ROUTES.account.messages], ['Uitloggen', ROUTES.account.logOut]]}
-                
+                navItems={ userStatus === 'regular user' ? SIDEBAR_NAV_ITEMS.account : SIDEBAR_NAV_ITEMS.dashboard.agency} 
                 activeItem={'Berichten'}/>
 
             </div>
@@ -88,10 +86,15 @@ function Messages() {
                     {
                             // Array.isArray(messages) ? 
                             
-                        allMessages.map((messageData) => (
-                        
+                        allMessages.map((messageData, index) => (
+                           
                             <tr onClick={()=>{
-                                updateActiveMessage(messageData)
+                                updateActiveMessage(messageData);
+                                setAllMessages(prevAllMessages => {
+                                    const currentMessage = prevAllMessages[index];
+                                    currentMessage.message.read = true;
+                                    return prevAllMessages;
+                                })
                                 // setIsOpenMessage(true);
                                 // setOpenMessageData(messageData);
                                 // updateMessageRead(messageData[1].id);
