@@ -1,0 +1,54 @@
+.container{
+    margin-top: 9em;
+}
+
+.sidebar{
+    position: relative;
+    width: 80%;
+}
+
+.messagesContainer{
+    margin-top: 3em;
+  
+}
+
+.messagesContainer h1{
+    margin-bottom: 1em;
+}
+
+.read{
+    background-color: #F0F3FF;
+}
+
+.unread{
+    background-color: white;
+}
+
+.sender{
+    padding: 1em 2em;
+    font-weight: 600;
+    cursor: pointer;
+    /* border: 1px solid ; */
+    /* px-4 py-2 border */
+}
+
+.message{
+    padding: 1em 2em;
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 600px) {
+    .container{
+        display: flex;
+        gap: 2em;
+        margin-top: 5em;
+    }
+
+    .sidebar{
+        width: 25%;
+    }
+
+    .messagesContainer{
+        margin-top: 3em;
+    }
+}

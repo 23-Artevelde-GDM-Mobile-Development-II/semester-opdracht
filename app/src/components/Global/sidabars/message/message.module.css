@@ -1,0 +1,189 @@
+.overlay{
+    background-color: rgba(26, 26, 26, 0.853);
+    width: 100%;
+    top: 92px;
+    height: 90vh;
+    position: fixed;
+    /* top: 0; */
+    left: 0;
+    z-index: 30;
+    /* bg-slate-900 opacity-70 w-full h-[100vh] fixed top-0 z-10 */
+}
+
+.messagePopup{
+    background-color: white;
+    position: fixed;
+    top: 92px;
+    width: 100%;
+    z-index: 40;
+    height: 90vh;
+    /* bg-white md:right-0 h-[100%] fixed top-[92px] w-full md:w-[60%] z-20 */
+}
+
+.messagePopup a{
+   color: #5FD4D8;
+}
+
+.messagePopup a:hover{
+    color: #41a9ad;
+}
+
+.closeBtn{
+    position: absolute;
+    top: 4em;
+    right: 4em;
+    margin-bottom: 2em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    /* absolute top-8 right-8 mb-4 */
+}
+
+.closeBtn i{
+    font-size: x-large;
+    transition: 300ms;
+    /* text-lg text-slate-400 hover:text-primair-blue duration-300 */
+}
+
+.closeBtn i:hover{
+    color: #536DFE;
+}
+
+.replyBtn{
+    position: absolute;
+    top: 20%;
+    right: 4em;
+    background-color: #5FD4D8;
+    padding: 1em 2em;
+    border-radius: 0.5rem;
+    border: none;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+.replyBtn i, .replyBtn span{
+    color: white;
+}
+
+.replyBtn i {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.replyBtn:hover{
+    background-color: #41a9ad;
+}
+
+
+.senderInfo{
+    background-color: #EBF6FF;
+    padding: 2em 3em;
+    border-bottom: 2px solid rgba(216, 216, 216, 0.296);
+}
+
+.senderInfo a{
+    margin-left: 0.5em;
+}
+
+
+/* Real estate info */
+.realEstateInfo{
+    background-color: #d7eeea;
+    padding: 1em;
+    display: flex;
+    gap: 2em;
+    margin-bottom: 4em;
+    border-radius: 1rem;
+}
+
+.realEstateInfo img{
+    width: 25%;
+    min-width: 100px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0.5rem;
+}
+
+.realEstateInfo div h3{
+    margin-top: 0;
+}
+
+/* Message */
+.messageTextContainer{
+    margin-bottom: 5em;
+    padding: 2em 3em;
+    margin-bottom: 20em;
+    height: 40%;
+    overflow-y: auto;
+    /* mb-10 pb-40 p-10 h-[65%] overflow-y-auto */
+}
+
+/* Reply */
+.toggleBtn{
+    margin-bottom: 1em;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+}
+
+.toggleBtn i{
+    margin-right: 1em;
+    font-size: x-large;
+}
+
+.toggleBtn span{
+    font-weight: bold;
+    font-size: larger;
+}
+
+.replyTitle{
+    margin-top: 4em;
+}
+
+
+.replyTextarea{
+    padding: 1em;
+    background-color: #F1F1F1;
+    border: 1px solid #E0E0E0;
+    outline: none;
+    border-radius: 0.5rem;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 200px;
+    margin-top: 2em;
+    min-width: 200px;
+}
+
+.replyTextarea:focus{
+    outline: 2px solid #c4c4c4;
+}
+
+.sendBtnPosition{
+    display: flex;
+    justify-content: end;
+    margin-top: 3em;
+}
+
+.primaryBtn{
+    background-color: #536DFE;
+    padding: 1em 2em;
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: 200ms;
+    border: none;
+}
+
+.primaryBtn:hover{
+    background-color: #2e49e1;
+    font-weight: 600;
+}
+
+@media only screen and (min-width: 600px) {
+    .messagePopup{
+        right: 0;
+        width: 60%;
+    }
+  }

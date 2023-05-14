@@ -36,7 +36,7 @@ function SendMessage({sender_id, receiver_id}) {
 
     return (
         <div>
-            <Popup title={message.isSend ? "Bericht is verzonden" : "Bericht sturen naar immokantoor"}>
+            <Popup title={message.isSend ? "Bericht is verzonden" : "Bericht sturen"}>
                 {message.isSend ?
                 <div className={styles.messageIsSend}>
                     <img className="h-[200px] mx-auto block mt-12" src={messageSentImg} alt="message is sent"/>

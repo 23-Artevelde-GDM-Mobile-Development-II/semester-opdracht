@@ -3,6 +3,7 @@ import SecondaryBtnLink from "../../Global/btns/secondaryBtnLink/secondaryBtnLin
 import styles from './contactCard.module.css';
 import { useState } from "react";
 import SendMessage from "../../Global/popups/sendMessage/sendMessage";
+import estateAgentIcon from "./estate-agent.png";
 
 function ContactCard({isLoggedIn, estateAgencyData, contactPersonData}) {
 
@@ -14,6 +15,7 @@ function ContactCard({isLoggedIn, estateAgencyData, contactPersonData}) {
 
     return(
         <>
+            {/* This is a popup to write a message to the contactperson of this real estate. */}
             <SendMessage/>
             
 
@@ -39,7 +41,7 @@ function ContactCard({isLoggedIn, estateAgencyData, contactPersonData}) {
                         <h4>Contactpersoon</h4>
 
                         <div className={`${styles.contactPerson} ${styles.justifyBetween}`}>
-                            <img src={contactPersonData.img} alt="avatar" />
+                            <img src={estateAgentIcon} alt="icon" />
                             <div>
                                 <p className={styles.name}>{contactPersonData.firstName} {contactPersonData.lastName}</p>
                                 <p>Makelaar</p>

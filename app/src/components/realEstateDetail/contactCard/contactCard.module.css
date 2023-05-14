@@ -71,8 +71,8 @@
 
 .contactCard .contactPerson img{
     display: block;
-    width: 30%;
-    object-fit: cover;
+    width: 25%;
+    object-fit: contain;
     border-radius: 0.5rem;
 }
 

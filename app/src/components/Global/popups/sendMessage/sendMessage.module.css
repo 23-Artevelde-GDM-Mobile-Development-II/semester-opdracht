@@ -17,6 +17,7 @@
     margin: 0 auto;
     min-height: 200px;
     margin-top: 2em;
+    min-width: 200px;
 }
 
 .message:focus{
@@ -45,3 +46,10 @@
     background-color: #2e49e1;
     font-weight: 600;
 }
+
+
+@media only screen and (min-width: 600px) {
+    .message{
+        min-width: 400px;
+    }
+  }

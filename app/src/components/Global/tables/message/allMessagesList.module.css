@@ -1,0 +1,14 @@
+.tableContainer{
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 1rem;
+
+    /* w-full mx-auto rounded-xl shadow-md */
+}
+
+.tableContainer table{
+    width: 100%;
+    min-width: 70vw;
+    margin: 0 auto;
+    /* w-full min-w-[70vw] mx-auto */
+}

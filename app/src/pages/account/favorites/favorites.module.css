@@ -1,0 +1,35 @@
+.container{
+    margin-top: 9em;
+}
+
+.sidebar{
+    position: relative;
+    width: 80%;
+}
+
+.favoritesContainer{
+    margin: 0 10%;
+    margin-top: 3em;
+  
+}
+
+.favoritesContainer h1{
+    margin-bottom: 1em;
+}
+
+@media only screen and (min-width: 600px) {
+    .container{
+        display: flex;
+        gap: 2em;
+        margin-top: 5em;
+    }
+
+    .sidebar{
+        width: 25%;
+    }
+
+    .favoritesContainer{
+        margin: 0;
+        margin-top: 3em;
+    }
+}

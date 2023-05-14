@@ -1,0 +1,37 @@
+.sidebar{
+    background-color: white;
+}
+
+.sidebar ul{
+    border-right: 1px solid #cfcfcf93;
+    background-color: white;
+    transition: 800ms;
+    z-index: 5;
+    padding: 2em;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar .navItem{
+    padding: 1em;
+    transition: 300ms;
+    list-style: none;
+}
+
+.sidebar ul a{
+    text-decoration: none;
+    color: #707070;
+}
+
+.navItem:hover, .activeNavItem{
+    border-left: 4px solid #536DFE;
+    color: #536DFE;
+}
+
+.activeNavItem{
+    font-weight: bold;
+}
+
+.navItem:hover{
+    opacity: 0.7;
+}
