@@ -12,7 +12,11 @@ const ROUTES = {
     },
     dashboard:{
       agency: {
-        realEstate: '/dashboard/panden',
+        realEstate: {
+          get: '/dashboard/panden',
+          post: '/dashboard/panden/nieuw',
+          patch: '/dashboard/panden/wijzigen'
+        },
         messages: '/dashboard/berichten',
         employees: '/dashboard/wernemers',
         agencyData: '/immokantoor-gegevens-bijwerken'

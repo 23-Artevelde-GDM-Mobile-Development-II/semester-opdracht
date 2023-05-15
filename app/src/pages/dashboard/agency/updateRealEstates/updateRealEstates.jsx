@@ -4,6 +4,8 @@ import DashboardAccountSidebar from '../../../../components/Global/sidabars/dash
 import SIDEBAR_NAV_ITEMS from '../../../../consts/sidebarNavItems';
 import GridCards from '../../../../components/Global/grid/gridCards/gridCards';
 import RealEstateCard from '../../../../components/Global/cards/realEstateCard/realEstateCard';
+import PrimaryBtnLink from '../../../../components/Global/btns/primaryBtnLink/primaryBtnLink';
+import ROUTES from '../../../../consts/routes';
 
 function UpdateRealEstates({userStatus}) {
     return (
@@ -16,10 +18,10 @@ function UpdateRealEstates({userStatus}) {
 
             </div>
 
-            <main className={styles.favoritesContainer}>
+            <main className={styles.realEstateContainer}>
                 <div className={styles.justifyBetween}>
                     <h1>Panden</h1>
-                    <button className={styles.primaryBtn}>Nieuw</button>
+                    <PrimaryBtnLink location={ROUTES.dashboard.agency.realEstate.post} text={'Nieuw'}/>
                 </div>
                 
 

@@ -10,7 +10,7 @@ const SIDEBAR_NAV_ITEMS = {
 
     dashboard:{
       agency: [
-        ['Panden', ROUTES.dashboard.agency.realEstate], 
+        ['Panden', ROUTES.dashboard.agency.realEstate.get], 
         ['Berichten', ROUTES.dashboard.agency.messages], 
         ['Werknemers', ROUTES.dashboard.agency.employees], 
         ['Gegevens immokantoor', ROUTES.dashboard.agency.agencyData],

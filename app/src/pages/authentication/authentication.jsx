@@ -11,6 +11,7 @@ import PersonalData from "../account/personalData/personalData";
 import Favorites from "../account/favorites/favorites";
 import Messages from "../account/messages/messages";
 import UpdateRealEstates from "../dashboard/agency/updateRealEstates/updateRealEstates";
+import AddEditRealEstate from "../dashboard/agency/updateRealEstates/addEditRealEstate/addEditRealEstate";
 
 const Authentication = () => {
 
@@ -31,7 +32,10 @@ const Authentication = () => {
 
                         {/* I need to check in this file if the logged in user is allowed to acces these routes, if that's not the case they should be rederected to a page with a 403 error */}
 
-                        <Route path={ROUTES.dashboard.agency.realEstate} element={<UpdateRealEstates userStatus={'agent'}/>} />
+                        <Route path={ROUTES.dashboard.agency.realEstate.get} element={<UpdateRealEstates userStatus={'agent'}/>} />
+                        
+                        <Route path={ROUTES.dashboard.agency.realEstate.post} element={<AddEditRealEstate isNew={true}/>} />
+                        
                         <Route path={ROUTES.dashboard.agency.messages} element={<Messages userStatus={'agent'}/>} />
 
 
