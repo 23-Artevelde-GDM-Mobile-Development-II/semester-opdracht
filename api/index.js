@@ -13,6 +13,9 @@ import { deleteUsersRouter } from "./routes/users/delete.js";
 
 import { postAgenciesRouter } from "./routes/realEstateAgencies/post.js";
 import { patchAgenciesRouter } from "./routes/realEstateAgencies/patch.js";
+import { getAgenciesRouter } from "./routes/realEstateAgencies/get.js";
+import { deleteRealEstateAgenciesRouter } from "./routes/realEstateAgencies/delete.js";
+import { postRealEstatesRouter } from "./routes/realEstate/post.js";
 
 
 
@@ -22,14 +25,13 @@ const app = express();
 // set the port for the server to listen on
 const port = process.env.PORT;
 
+// register middleware
+registerMiddleware(app);
 
 // initialize MongoDB client and database
 // const client = await initClient();
 // const db = client.db("immo_platform");
 
-
-// register middleware
-registerMiddleware(app);
 
 app.use(async (req, res, next) => {
   if (req.headers.authorization) {
@@ -61,7 +63,9 @@ app.use(async (req, res, next) => {
 // Routes to create, delete, update or get users
 app.use(postUsersRouter, getUsersRouter, patchUsersRouter, deleteUsersRouter);
 
-app.use('/realEstateAgencies', postAgenciesRouter, patchAgenciesRouter);
+app.use('/realEstateAgencies', postAgenciesRouter, getAgenciesRouter, patchAgenciesRouter, deleteRealEstateAgenciesRouter);
+
+app.use('/realEstates', postRealEstatesRouter)
 // app.use(adminRouterGetUser);
 // app.use(realEstateAgentRouterGetUser);
 

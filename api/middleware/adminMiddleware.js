@@ -9,15 +9,15 @@ export async function adminMiddleware(req, res, next) {
     console.log('userRole', userRole);
 
     if (userRole && userRole.role === 'admin') {
-      return next();
+      next();
     } else {
       return res.status(403).json({
         error: "Forbidden, you don't have the correct role to access this route.",
       });
     }
+  }else{
+    return res.status(401).json({
+      error: "Unauthorized",
+    });
   }
-
-  return res.status(401).json({
-    error: "Unauthorized",
-  });
 }
