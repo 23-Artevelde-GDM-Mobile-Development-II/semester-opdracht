@@ -27,5 +27,8 @@ const initClient = async () => {
     return client;
 };
 
+const client = await initClient();
+const db = await client.db("immo_platform");
+
 // Export the 'initClient' function for use in other modules
-export { initClient };
+export { db };
