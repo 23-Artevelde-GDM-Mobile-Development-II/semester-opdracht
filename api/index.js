@@ -16,6 +16,9 @@ import { patchAgenciesRouter } from "./routes/realEstateAgencies/patch.js";
 import { getAgenciesRouter } from "./routes/realEstateAgencies/get.js";
 import { deleteRealEstateAgenciesRouter } from "./routes/realEstateAgencies/delete.js";
 import { postRealEstatesRouter } from "./routes/realEstate/post.js";
+import { patchRealEstatesRouter } from "./routes/realEstate/patch.js";
+import { getRealEstatesRouter } from "./routes/realEstate/get.js";
+import { deleteRealEstatesRouter } from "./routes/realEstate/delete.js";
 
 
 
@@ -65,7 +68,7 @@ app.use(postUsersRouter, getUsersRouter, patchUsersRouter, deleteUsersRouter);
 
 app.use('/realEstateAgencies', postAgenciesRouter, getAgenciesRouter, patchAgenciesRouter, deleteRealEstateAgenciesRouter);
 
-app.use('/realEstates', postRealEstatesRouter)
+app.use('/realEstates', postRealEstatesRouter, patchRealEstatesRouter, getRealEstatesRouter, deleteRealEstatesRouter);
 // app.use(adminRouterGetUser);
 // app.use(realEstateAgentRouterGetUser);
 

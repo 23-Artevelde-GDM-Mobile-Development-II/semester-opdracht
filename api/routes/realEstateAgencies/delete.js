@@ -6,10 +6,6 @@ import { realEstateAgentMiddleware } from "../../middleware/realEstateAgentMiddl
 
 const deleteRealEstateAgenciesRouter = express.Router();
 
-async function deleteUserData(userId, req, res) {
-    
-}
-
 // Remove user by id - (ADMIN ROUTE)
 deleteRealEstateAgenciesRouter.delete("/:id", adminMiddleware, async (req, res) => {
   const id = req.params.id;
@@ -134,14 +130,3 @@ deleteRealEstateAgenciesRouter.delete("/own/employees/:id", realEstateAgentMiddl
 
 
 export {deleteRealEstateAgenciesRouter};
-
-
-// authRouter.delete("/students/:id", async (req, res) => {
-//   const id = req.params.id;
-
-//   await db.collection("students").deleteOne({
-//     _id: ObjectId(id),
-//   });
-
-//   res.json({});
-// });

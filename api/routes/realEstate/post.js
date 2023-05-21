@@ -20,26 +20,44 @@ postRealEstatesRouter.post("/", realEstateAgentMiddleware, async (req, res) => {
   
 // Add a new type for real estates
 postRealEstatesRouter.post("/types", adminMiddleware, async (req, res) => {
-    const type = req.body.type;
+    const typeName = req.body.type;
 
-    await db.collection("realEstateTypes").insertOne({ 
-        type: type,
-     });
+    const type = await db.collection("realEstateTypes").findOne({
+        type: typeName,
+    });
 
-    return res.json({message: 'Real estate type has been added to the database.'});
+    if(!type){
+        await db.collection("realEstateTypes").insertOne({ 
+            type: typeName,
+         });
+    
+        return res.json({message: 'Real estate type has been added to the database.'});
+    }else{
+        return res.status(400).json({message: 'Real estate type has already been added to the database.'});
+    }
+    
 });
 
 // Add a new subtype of an type for real estates 
 postRealEstatesRouter.post("/types/:typeId/subtypes", adminMiddleware, async (req, res) => {
     const typeId = req.params.typeId;
-    const subtype = req.body.subtype;
+    const subtypeName = req.body.subtype;
 
-    await db.collection("realEstateSubTypes").insertOne({ 
-        typeId: new ObjectId(typeId),
-        subtype: subtype
-     });
 
-    return res.json({message: 'Real estate subtype has been added to the database.'});
+    const subtype = await db.collection("realEstateSubTypes").findOne({
+        subtype: subtypeName,
+    });
+    
+    if (!subtype) {
+        await db.collection("realEstateSubTypes").insertOne({ 
+            typeId: new ObjectId(typeId),
+            subtype: subtypeName
+         });
+    
+        return res.json({message: 'Real estate subtype has been added to the database.'});
+    }else{
+        return res.status(400).json({message: 'Real estate subtype has already been added to the database.'});
+    }
 });
 
 export { postRealEstatesRouter };
