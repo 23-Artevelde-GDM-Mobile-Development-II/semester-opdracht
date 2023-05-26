@@ -20,6 +20,10 @@ import { patchRealEstatesRouter } from "./routes/realEstate/patch.js";
 import { getRealEstatesRouter } from "./routes/realEstate/get.js";
 import { deleteRealEstatesRouter } from "./routes/realEstate/delete.js";
 import { postFavoritesRouter } from "./routes/favorites/post.js";
+import { getFavoritesRouter } from "./routes/favorites/get.js";
+import { deleteFavoritesRouter } from "./routes/favorites/delete.js";
+import { postMessagesRouter } from "./routes/messages/post.js";
+import { patchMessagesRouter } from "./routes/messages/patch.js";
 
 
 
@@ -71,7 +75,9 @@ app.use('/realEstateAgencies', postAgenciesRouter, getAgenciesRouter, patchAgenc
 
 app.use('/realEstates', postRealEstatesRouter, patchRealEstatesRouter, getRealEstatesRouter, deleteRealEstatesRouter);
 
-app.use('/favorites', postFavoritesRouter);
+app.use('/myFavorites', postFavoritesRouter, getFavoritesRouter, deleteFavoritesRouter);
+
+app.use('/myMessages', postMessagesRouter, patchMessagesRouter);
 // app.use(adminRouterGetUser);
 // app.use(realEstateAgentRouterGetUser);
 

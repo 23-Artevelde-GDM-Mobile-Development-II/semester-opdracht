@@ -42,19 +42,19 @@ patchAgenciesRouter.patch("/:id", adminMiddleware, async (req, res) => {
 
 // update own agency of the real estate agent
 patchAgenciesRouter.patch("/own", realEstateAgentMiddleware , async (req, res) => {
-    // const loggedInUser = req.user;
+    const loggedInUser = req.user;
 
 
-    // const employee = await db.collection("employees").findOne({
-    //     userId: loggedInUser._id,
-    // });
+    const employee = await db.collection("employees").findOne({
+        userId: loggedInUser._id,
+    });
 
-    // if (employee) {
-    //     const agencyId = employee.realEstateAgencyId;
-    //     updateAgency(agencyId, req, res); // Pass the agencyId to the updateAgency function
-    // } else {
-    //     return res.status(403).json({ error: "You are not able to edit the real estate agency data because you are not added to a real estate agency." });
-    // }
+    if (employee) {
+        const agencyId = employee.realEstateAgencyId;
+        updateAgency(agencyId, req, res); // Pass the agencyId to the updateAgency function
+    } else {
+        return res.status(403).json({ error: "You are not able to edit the real estate agency data because you are not added to a real estate agency." });
+    }
 });
 
   
