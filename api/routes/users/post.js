@@ -7,12 +7,12 @@ import { db } from "../../db/mongo.js";
 // import { adminRouter } from "../../middleware/routers/admin.js";
 // import { realEstateAgentRouter } from "../../middleware/routers/realEstateAgent.js";
 import { adminMiddleware } from "../../middleware/adminMiddleware.js";
+import { createAndUpadateUserRolesSchema, createUserSchema } from "../../validators/userValidator.js";
 
 // const realEstateAgentRouterUser = realEstateAgentRouter;
 
 
 const postUsersRouter = express.Router();
-// const postUseradminRouter = express.Router();
 
 // define a route to handle user login
 postUsersRouter.post("/login", async (req, res) => {
@@ -42,17 +42,22 @@ postUsersRouter.post("/login", async (req, res) => {
 });
   
 postUsersRouter.post("/users/add", async (req, res) => {
+    const { error, value } = createUserSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+      const errorArray = [];
+      error.details.map((err)=>{
+        errorArray.push(err.message);
+      })
+      return res.status(400).json({ errors: errorArray });
+    }
+
+
+    const {firstname, lastname, email, phoneNr, password} = value;
     const salt = await bcrypt.genSalt(10);
   
-    const firstname = req.body.firstname;
-    const lastname = req.body.lastname;
-    const email = req.body.email;
-    const phoneNr = req.body.phoneNr;
     //   Hash given password
-    const hashPassword = await bcrypt.hash(req.body.password, salt);
-  //   const userRole = req.body.role.userRole;
-  //   const realEstateAgencyId = req.body.role.realEstateAgencyId;
-  
+    const hashPassword = await bcrypt.hash(password, salt);
   
   
     // check if user exists in the database
@@ -66,17 +71,14 @@ postUsersRouter.post("/users/add", async (req, res) => {
           email: email,
           phoneNr: phoneNr,
           password: hashPassword,
-          // role: {
-          //     userRole: userRole,
-          //     realEstateAgencyId: realEstateAgencyId
-          // },
           registeredOn: Date.now()
        });
+
       user = await db.collection("users").findOne({ email });
       return res.json(user);
     }else{
       return res.status(400).json({
-          error: 'User already exist with this email addres',
+          error: 'User already exist with this email addres.',
       });
     }
   
@@ -84,13 +86,23 @@ postUsersRouter.post("/users/add", async (req, res) => {
   
 
 // Add role to a user - (ADMIN ROUTE) 
-postUsersRouter.post("/users/:id/role", adminMiddleware, async (req, res) => {
-    console.log(req.user);
-    const id = req.params.id;
+postUsersRouter.post("/users/:userId/role", adminMiddleware, async (req, res) => {
+    const userId = req.params.userId;
     const role = req.body.role;
-  
+
+    // Validation
+    const { error, value } = createAndUpadateUserRolesSchema.validate({userId, role}, { abortEarly: false });
+
+    if (error) {
+      const errorArray = [];
+      error.details.map((err)=>{
+        errorArray.push(err.message);
+      })
+      return res.status(400).json({ errors: errorArray });
+    }
+
     const user = await db.collection("users").findOne({
-      _id: new ObjectId(id),
+      _id: new ObjectId(userId),
     });
   
     console.log(user);
@@ -101,7 +113,7 @@ postUsersRouter.post("/users/:id/role", adminMiddleware, async (req, res) => {
       });
     }else{
       const assignedToUser = await db.collection("userRoles").findOne({
-        userId:  new ObjectId(id),
+        userId:  new ObjectId(userId),
       });
   
       console.log(assignedToUser);
@@ -113,7 +125,7 @@ postUsersRouter.post("/users/:id/role", adminMiddleware, async (req, res) => {
         });
       }else{
         const userRole = await db.collection("userRoles").insertOne({ 
-          userId:  new ObjectId(id),
+          userId:  new ObjectId(userId),
           role: role
         });
         
@@ -125,50 +137,6 @@ postUsersRouter.post("/users/:id/role", adminMiddleware, async (req, res) => {
     }
     
 });
-
-
-// adminRouter.post("/users/:id/role", async (req, res) => {
-//     console.log(req.user);
-//     const id = req.params.id;
-//     const role = req.body.role;
-  
-//     const user = await db.collection("users").findOne({
-//       _id: new ObjectId(id),
-//     });
-  
-//     console.log(user);
-  
-//     if(!user){
-//       res.status(404).json({
-//         error: "User not found, so it's impossible to add a role to this person.",
-//       });
-//     }else{
-//       const assignedToUser = await db.collection("userRoles").findOne({
-//         userId:  new ObjectId(id),
-//       });
-  
-//       console.log(assignedToUser);
-  
-//       if(assignedToUser){
-//         res.status(400).json({
-//           message: 'A role has already been assigned to the user',
-//           role: assignedToUser.role
-//         });
-//       }else{
-//         const userRole = await db.collection("userRoles").insertOne({ 
-//           userId:  new ObjectId(id),
-//           role: role
-//         });
-        
-//         res.json({
-//           message: 'A role has been assigned to the user',
-//           id: userRole.insertedId
-//         });
-//       }
-//     }
-    
-// });
-
   
 
 export { postUsersRouter };

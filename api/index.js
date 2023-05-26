@@ -24,6 +24,7 @@ import { getFavoritesRouter } from "./routes/favorites/get.js";
 import { deleteFavoritesRouter } from "./routes/favorites/delete.js";
 import { postMessagesRouter } from "./routes/messages/post.js";
 import { patchMessagesRouter } from "./routes/messages/patch.js";
+import { getMessagesRouter } from "./routes/messages/get.js";
 
 
 
@@ -77,7 +78,7 @@ app.use('/realEstates', postRealEstatesRouter, patchRealEstatesRouter, getRealEs
 
 app.use('/myFavorites', postFavoritesRouter, getFavoritesRouter, deleteFavoritesRouter);
 
-app.use('/myMessages', postMessagesRouter, patchMessagesRouter);
+app.use('/myMessages', postMessagesRouter, patchMessagesRouter, getMessagesRouter);
 // app.use(adminRouterGetUser);
 // app.use(realEstateAgentRouterGetUser);
 

@@ -6,6 +6,7 @@ import { adminMiddleware } from "../../middleware/adminMiddleware.js";
 
 // Bcript to hash passwords
 import bcrypt from 'bcrypt';
+import { createAndUpadateUserRolesSchema, updateUserSchema } from "../../validators/userValidator.js";
 
 const patchUsersRouter = express.Router();
 
@@ -40,6 +41,14 @@ patchUsersRouter.patch("/users/:id", adminMiddleware ,async (req, res) => {
 
     const id = req.params.id;
 
+    // Validation
+    const { error, value } = updateUserSchema.validate({ id, ...req.body }, { abortEarly: false });
+
+    if (error) {
+      const errorArray = error.details.map((err) => err.message);
+      return res.status(400).json({ errors: errorArray });
+    }
+
     // check if user exists
     const user = await db
     .collection("users")
@@ -52,6 +61,14 @@ patchUsersRouter.patch("/users/:id", adminMiddleware ,async (req, res) => {
 
 // update data from the user that's logged in
 patchUsersRouter.patch("/loggedInUser", async (req, res) => {
+
+    // Validation
+    const { error, value } = updateUserSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }
     
     const loggedInUser = req.user;
     
@@ -60,15 +77,25 @@ patchUsersRouter.patch("/loggedInUser", async (req, res) => {
 
 
 // Update user roles (ADMIN ROUTE)
-patchUsersRouter.patch("/users/:id/role", adminMiddleware ,async (req, res) => {
+patchUsersRouter.patch("/users/:userId/role", adminMiddleware ,async (req, res) => {
     
-    const id = req.params.id;
+    const userId = req.params.userId;
+    const role = req.body.role;
+
+    // Validation
+    const { error, value } = createAndUpadateUserRolesSchema.validate({userId, role}, { abortEarly: false });
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }
+
     const userRole = await db.collection("userRoles").findOne({
-        userId: new ObjectId(id),
+        userId: new ObjectId(userId),
     });
 
     if (userRole) {
-        const { _id, userId, ...data } = req.body;
+        const { userId, ...data } = value;
          
         const newData = { ...userRole, ...data };
         await db.collection("userRoles").replaceOne({ _id: userRole._id }, newData);
