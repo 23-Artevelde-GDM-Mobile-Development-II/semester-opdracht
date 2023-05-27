@@ -2,17 +2,24 @@ import express from "express";
 import { ObjectId } from "mongodb";
 
 import { db } from "../../db/mongo.js";
+import { updateMessageSchema } from "../../validators/messagesValidator.js";
 
 const patchMessagesRouter = express.Router();
 
-
-    
 
 // send a new message
 patchMessagesRouter.patch("/:messageId", async (req, res) => {
     const {messageId} = req.params;
     const loggedInUser = req.user;
     const isRead = req.body.isRead;
+
+    const { error } = updateMessageSchema.validate({messageId, isRead}, {abortEarly: false });
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }  
+   
 
     if(loggedInUser){
         // check if the reciever with the given id exist.

@@ -2,6 +2,7 @@ import express from "express";
 import { ObjectId } from "mongodb";
 
 import { db } from "../../db/mongo.js";
+import { createMessageSchema, createReplySchema } from "../../validators/messagesValidator.js";
 
 const postMessagesRouter = express.Router();
 
@@ -11,7 +12,7 @@ async function sendMessage(sender, receiverId, realEstateId, messageText, replie
         // check if the reciever with the given id exist.
         const senderId = sender._id;
         let receiver = await db.collection("users").findOne({_id: new ObjectId(receiverId)});
- 
+
         if (receiver) {
             
             try {
@@ -52,7 +53,16 @@ async function sendMessage(sender, receiverId, realEstateId, messageText, replie
 
 // send a new message
 postMessagesRouter.post("/sendMessage", async (req, res) => {
-    const {receiverId, realEstateId, messageText} = req.body;
+
+    const { error, value } = createMessageSchema.validate({...req.body}, {abortEarly: false });
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }  
+
+    const {receiverId, realEstateId, messageText} = value;
+
     const loggedInUser = req.user;
 
     sendMessage(loggedInUser, receiverId, realEstateId, messageText, undefined, res);
@@ -61,7 +71,15 @@ postMessagesRouter.post("/sendMessage", async (req, res) => {
 
 
 postMessagesRouter.post("/sendReply", async (req, res) => {
-    const {receiverId, realEstateId, messageText, repliedMessageId} = req.body;
+
+    const { error, value } = createReplySchema.validate({...req.body}, {abortEarly: false });
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }  
+
+    const {receiverId, realEstateId, messageText, repliedMessageId} = value;
     const loggedInUser = req.user;
 
     sendMessage(loggedInUser, receiverId, realEstateId, messageText, repliedMessageId, res);

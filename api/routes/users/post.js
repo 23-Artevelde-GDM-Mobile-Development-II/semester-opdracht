@@ -4,12 +4,8 @@ import { ObjectId } from "mongodb";
 // Bcript to hash passwords
 import bcrypt from 'bcrypt';
 import { db } from "../../db/mongo.js";
-// import { adminRouter } from "../../middleware/routers/admin.js";
-// import { realEstateAgentRouter } from "../../middleware/routers/realEstateAgent.js";
 import { adminMiddleware } from "../../middleware/adminMiddleware.js";
 import { createAndUpadateUserRolesSchema, createUserSchema } from "../../validators/userValidator.js";
-
-// const realEstateAgentRouterUser = realEstateAgentRouter;
 
 
 const postUsersRouter = express.Router();
@@ -105,7 +101,6 @@ postUsersRouter.post("/users/:userId/role", adminMiddleware, async (req, res) =>
       _id: new ObjectId(userId),
     });
   
-    console.log(user);
   
     if(!user){
       res.status(404).json({
@@ -115,8 +110,6 @@ postUsersRouter.post("/users/:userId/role", adminMiddleware, async (req, res) =>
       const assignedToUser = await db.collection("userRoles").findOne({
         userId:  new ObjectId(userId),
       });
-  
-      console.log(assignedToUser);
   
       if(assignedToUser){
         res.status(400).json({

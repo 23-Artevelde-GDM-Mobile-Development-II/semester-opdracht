@@ -2,16 +2,22 @@ import express from "express";
 import { ObjectId } from "mongodb";
 
 import { db } from "../../db/mongo.js";
-import { adminMiddleware } from "../../middleware/adminMiddleware.js";
-import { realEstateAgentMiddleware } from "../../middleware/realEstateAgentMiddleware.js";
+import { idSchema } from "../../validators/idValidator.js";
 
 const postFavoritesRouter = express.Router();
 
 // add a new favorites
 postFavoritesRouter.post("/:houseId", async (req, res) => {
     const houseId = new ObjectId(req.params.houseId);
-
     const loggedInUser = req.user;
+
+    // Validation of the id
+    const { error } = idSchema.validate(houseId);
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }
 
     if(loggedInUser){
         // check if the favorite with the given userId and housId is already in the database.

@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 
 import { db } from "../../db/mongo.js";
 import { realEstateAgentMiddleware } from "../../middleware/realEstateAgentMiddleware.js";
+import { updateRealEstate } from "../../validators/realEstateValidator.js";
 
 
 const patchRealEstatesRouter = express.Router();
@@ -11,7 +12,15 @@ const patchRealEstatesRouter = express.Router();
 patchRealEstatesRouter.patch("/:id", realEstateAgentMiddleware ,async (req, res) => {
 
     const id = req.params.id;
-    const { _id, publishDate, ...data } = req.body;
+
+    const { error } = updateRealEstate.validate({...req.body, id}, {abortEarly: false });
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }
+
+    const { ...data } = req.body;
 
     const realEstate = await db
     .collection("realEstates")

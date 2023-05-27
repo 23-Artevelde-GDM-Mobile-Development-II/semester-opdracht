@@ -1,13 +1,10 @@
 import { db } from "../db/mongo.js";
 
 export async function realEstateAgentMiddleware(req, res, next) {
-  console.log('Entered realEstateAgentMiddleware'); // Debug logging
   const loggedInUser = req.user;
-  console.log('loggedinUser<3', loggedInUser);
 
   if (loggedInUser !== undefined) {
     const userRole = await db.collection("userRoles").findOne({ userId: loggedInUser._id });
-    console.log('userRole', userRole);
 
     if (userRole && (userRole.role === 'realEstateAgent' || userRole.role === 'admin')) {
       next();

@@ -1,5 +1,4 @@
 import express from "express";
-import { ObjectId } from "mongodb";
 
 import { db } from "../../db/mongo.js";
 
@@ -26,7 +25,6 @@ getFavoritesRouter.get("/", async (req, res) => {
                 favoriteRealEstatesData.push(realEstateData);
             });
 
-            console.log(favoriteRealEstatesData);
             return res.json(favoriteRealEstatesData);
 
         }else{

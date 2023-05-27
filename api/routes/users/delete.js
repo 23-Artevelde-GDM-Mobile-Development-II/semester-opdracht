@@ -2,7 +2,6 @@ import express from "express";
 import { ObjectId } from "mongodb";
 import { db } from "../../db/mongo.js";
 import { adminMiddleware } from "../../middleware/adminMiddleware.js";
-import { realEstateAgentMiddleware } from "../../middleware/realEstateAgentMiddleware.js";
 
 const deleteUsersRouter = express.Router();
 
@@ -29,6 +28,15 @@ async function deleteUserData(userId, req, res) {
 // Remove user by id - (ADMIN ROUTE)
 deleteUsersRouter.delete("/users/:id", adminMiddleware, async (req, res) => {
   const id = req.params.id;
+
+  // Validation
+  const { error } = idSchema.validate(id);
+
+  if (error) {
+       const errorArray = error.details.map((err) => err.message);
+       return res.status(400).json({ errors: errorArray });
+  }
+
   const user = await db.collection("users").findOne({
     _id: new ObjectId(id),
   });
@@ -57,14 +65,3 @@ deleteUsersRouter.delete("/loggedInUser", async (req, res) => {
 });
 
 export {deleteUsersRouter};
-
-
-// authRouter.delete("/students/:id", async (req, res) => {
-//   const id = req.params.id;
-
-//   await db.collection("students").deleteOne({
-//     _id: ObjectId(id),
-//   });
-
-//   res.json({});
-// });

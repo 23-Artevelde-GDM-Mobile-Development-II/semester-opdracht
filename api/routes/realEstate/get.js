@@ -1,8 +1,9 @@
 import express from "express";
 import { ObjectId } from "mongodb";
 import { db } from "../../db/mongo.js";
-import { adminMiddleware } from "../../middleware/adminMiddleware.js";
 import { realEstateAgentMiddleware } from "../../middleware/realEstateAgentMiddleware.js";
+import { getRealEstate } from "../../validators/realEstateValidator.js";
+import { idSchema } from "../../validators/idValidator.js";
 
 const getRealEstatesRouter = express.Router();
 
@@ -11,7 +12,14 @@ getRealEstatesRouter.get("/sellingMethod/:sellingMethod", async (req, res) => {
   const sellingMethod = req.params.sellingMethod;
   const sortBy = req.query.sortBy
 
-  const { _id, typeId, subTypeId, city, zipCode, priceMin, priceMax, livingAreaMin,
+  const { error } = getRealEstate.validate({...req.body, sellingMethod}, {abortEarly: false });
+
+  if (error) {
+    const errorArray = error.details.map((err) => err.message);
+    return res.status(400).json({ errors: errorArray });
+  }  
+
+  const { typeId, subTypeId, city, zipCode, priceMin, priceMax, livingAreaMin,
   livingAreaMax, landAcreageMin, landAcreageMax, numberOfRoomsMin, numberOfBathroomsMin, 
   gardenAvailable, terraceAvailable, balconyAvailable, parkingAvailable, hasSolarPanels, epcMin} = req.body;
 
@@ -33,7 +41,7 @@ getRealEstatesRouter.get("/sellingMethod/:sellingMethod", async (req, res) => {
         { 'outside.terraceAvailable':terraceAvailable },
         { 'outside.balconyAvailable':balconyAvailable },
         { 'outside.parkingAvailable':parkingAvailable },
-        { 'layout.numberOfRooms': { $gte: numberOfRoomsMin } },
+        { 'layout.numberOfBedrooms': { $gte: numberOfRoomsMin } },
         { 'layout.numberOfBathrooms': { $gte: numberOfBathroomsMin } },
         
         { 'energy.hasSolarPanels':hasSolarPanels },
@@ -99,6 +107,15 @@ getRealEstatesRouter.get("/", realEstateAgentMiddleware, async (req, res) => {
 // Get real estate by id
 getRealEstatesRouter.get("/realEstateId/:id", async (req, res) => {
   const id = req.params.id;
+
+  // Validation of the id
+  const { error } = idSchema.validate(id);
+
+  if (error) {
+      const errorArray = error.details.map((err) => err.message);
+      return res.status(400).json({ errors: errorArray });
+  }
+
   const realEstate = await db.collection("realEstates").findOne({
     _id: new ObjectId(id),
   });

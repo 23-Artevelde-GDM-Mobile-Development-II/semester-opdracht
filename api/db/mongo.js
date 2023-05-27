@@ -28,7 +28,7 @@ const initClient = async () => {
 };
 
 const client = await initClient();
-const db = await client.db("immo_platform");
+const db = await client.db(process.env.MONGODB_DBNAME);
 
 // Export the 'initClient' function for use in other modules
 export { db };

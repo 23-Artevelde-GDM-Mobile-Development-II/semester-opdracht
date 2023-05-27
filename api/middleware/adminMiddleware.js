@@ -2,11 +2,9 @@ import { db } from "../db/mongo.js";
 
 export async function adminMiddleware(req, res, next) {
   const loggedInUser = req.user;
-  console.log('loggedinUser', loggedInUser);
 
   if (loggedInUser !== undefined) {
     const userRole = await db.collection("userRoles").findOne({ userId: loggedInUser._id });
-    console.log('userRole', userRole);
 
     if (userRole && userRole.role === 'admin') {
       next();

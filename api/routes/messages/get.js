@@ -1,6 +1,7 @@
 import express from "express";
 import { ObjectId } from "mongodb";
 import { db } from "../../db/mongo.js";
+import { idSchema } from "../../validators/idValidator.js";
 
 const getMessagesRouter = express.Router();
 
@@ -49,6 +50,14 @@ getMessagesRouter.get("/sent/all", async (req, res) => {
 getMessagesRouter.get("/:messageId", async (req, res) => {
     const loggedInUser = req.user;
     const messageId = req.params.messageId;
+
+    // Validation of the id
+    const { error } = idSchema.validate(messageId);
+
+    if (error) {
+        const errorArray = error.details.map((err) => err.message);
+        return res.status(400).json({ errors: errorArray });
+    }
 
     if(loggedInUser){
 
