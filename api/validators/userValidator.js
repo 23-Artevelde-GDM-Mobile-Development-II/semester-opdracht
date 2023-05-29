@@ -1,12 +1,16 @@
 import Joi from 'joi';
 
+export const loginSchema = Joi.object({
+	email: Joi.string().email().required(),
+	password: Joi.string().required()
+});
+
 export const createUserSchema = Joi.object({
     firstname: Joi.string().required(),
 	lastname: Joi.string().required(),
 	email: Joi.string().email().required(),
 	phoneNr: Joi.number().positive().required(),
-	password: Joi.string()
-    .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required()
+	password: Joi.string().required()
 });
 
 export const createAndUpadateUserRolesSchema = Joi.object({
@@ -31,6 +35,5 @@ export const updateUserSchema = Joi.object({
 	email: Joi.string().email(),
 	phoneNr: Joi.number().positive(),
 	password: Joi.string()
-    .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
 });
 

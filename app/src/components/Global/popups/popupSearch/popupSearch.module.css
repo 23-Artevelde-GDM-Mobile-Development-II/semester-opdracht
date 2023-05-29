@@ -1,0 +1,26 @@
+.searchBar{
+    display: flex;
+    margin-bottom: 2rem;
+    position: relative;
+    /* flex mb-4 */
+}
+
+.searchBar input{
+    display: inline-block;
+    width: 80%;
+}
+
+.searchBar button{
+    display: inline-block;
+    width: 30%;
+    position: absolute;
+    right: -5rem;
+}
+
+.cardsChildren{
+    width: 100%;
+    min-width: 400px;
+    overflow-y: scroll;
+    max-height: 300px;
+    /* w-full min-w-[400px] overflow-y-scroll max-h-[300px] */
+}

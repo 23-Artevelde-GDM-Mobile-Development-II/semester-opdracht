@@ -1,5 +1,7 @@
 const ROUTES = {
     home: "/",
+    login: "/inloggen",
+    register: "/registreer",
     contact: "/contact",
     searchRealEstate: "/zoeken",
     realEstateDetail: "/panden/5",

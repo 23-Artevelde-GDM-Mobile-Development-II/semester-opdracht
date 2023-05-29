@@ -17,6 +17,23 @@
     margin-bottom: 1em;
 }
 
+.imageContainer{
+    margin-bottom: 2em;
+}
+
+.imageContainer img{
+    height: 8rem;
+    border-radius: 1rem;
+    /* width: 100%; */
+    object-fit: cover;
+    display: block;
+    margin: 1rem 0;
+}
+
+.imageContainer label{
+    display: block;
+}
+
 @media only screen and (min-width: 600px) {
     .container{
         display: flex;

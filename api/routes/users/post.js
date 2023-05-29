@@ -5,14 +5,24 @@ import { ObjectId } from "mongodb";
 import bcrypt from 'bcrypt';
 import { db } from "../../db/mongo.js";
 import { adminMiddleware } from "../../middleware/adminMiddleware.js";
-import { createAndUpadateUserRolesSchema, createUserSchema } from "../../validators/userValidator.js";
+import { createAndUpadateUserRolesSchema, createUserSchema, loginSchema } from "../../validators/userValidator.js";
 
 
 const postUsersRouter = express.Router();
 
 // define a route to handle user login
 postUsersRouter.post("/login", async (req, res) => {
-    const email = req.body.email;
+    const { error, value } = loginSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+      const errorArray = [];
+      error.details.map((err)=>{
+        errorArray.push(err.message);
+      })
+      return res.status(400).json({ error: errorArray });
+    }
+
+    const email = value.email;
     
   
     // check if user exists in the database
@@ -24,7 +34,7 @@ postUsersRouter.post("/login", async (req, res) => {
           error: "User doesn't exist",
       });
     }else{
-      const validPassword = await bcrypt.compare(req.body.password, user.password);
+      const validPassword = await bcrypt.compare(value.password, user.password);
       if (!validPassword){
           return res.status(401).json({error: 'Incorrect Password'})
       }else{
@@ -45,7 +55,7 @@ postUsersRouter.post("/users/add", async (req, res) => {
       error.details.map((err)=>{
         errorArray.push(err.message);
       })
-      return res.status(400).json({ errors: errorArray });
+      return res.status(400).json({ error: errorArray });
     }
 
 
@@ -94,7 +104,7 @@ postUsersRouter.post("/users/:userId/role", adminMiddleware, async (req, res) =>
       error.details.map((err)=>{
         errorArray.push(err.message);
       })
-      return res.status(400).json({ errors: errorArray });
+      return res.status(400).json({ error: errorArray });
     }
 
     const user = await db.collection("users").findOne({

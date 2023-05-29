@@ -12,6 +12,10 @@ import Favorites from "../account/favorites/favorites";
 import Messages from "../account/messages/messages";
 import UpdateRealEstates from "../dashboard/agency/updateRealEstates/updateRealEstates";
 import AddEditRealEstate from "../dashboard/agency/updateRealEstates/addEditRealEstate/addEditRealEstate";
+import LogIn from "../authorization/logIn";
+import Register from "../authorization/register";
+// import LoginContainer from "../authorization/logic/loginContainer";
+import EmployeesTable from "../dashboard/agency/employees/employees";
 
 const Authentication = () => {
 
@@ -20,11 +24,14 @@ const Authentication = () => {
             <Router>
                 <Header />
                     <Routes>
+                        <Route path={ROUTES.login} element={<LogIn />}/>
+                        {/* <Route path={ROUTES.login} element={<LoginContainer />}/> */}
+                        <Route path={ROUTES.register} element={<Register />}/>
                         {/* Routes for regular users */}
                         <Route path={ROUTES.home} element={<Home />}/>
                         <Route path={ROUTES.searchRealEstate} element={<SearchRealEstate/>} />
                         <Route path={ROUTES.realEstateDetail} element={<RealEstateDetail/>} />
-                        <Route path={ROUTES.account.personalData} element={<PersonalData/>} />
+                        <Route path={ROUTES.account.personalData} element={<PersonalData routePath={ROUTES.account.personalData}/>} />
                         <Route path={ROUTES.account.favorites} element={<Favorites/>} />
                         <Route path={ROUTES.account.messages} element={<Messages userStatus={'regular user'}/>} />
 
@@ -37,6 +44,10 @@ const Authentication = () => {
                         <Route path={ROUTES.dashboard.agency.realEstate.post} element={<AddEditRealEstate isNew={true}/>} />
                         
                         <Route path={ROUTES.dashboard.agency.messages} element={<Messages userStatus={'agent'}/>} />
+
+                        <Route path={ROUTES.dashboard.agency.employees} element={<EmployeesTable userStatus={'agent'}/>} />
+
+                        <Route path={ROUTES.dashboard.agency.agencyData} element={<PersonalData routePath={ROUTES.dashboard.agency.agencyData}/>} />
 
 
 
