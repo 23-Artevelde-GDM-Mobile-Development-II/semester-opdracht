@@ -21,7 +21,7 @@ const ROUTES = {
         },
         messages: '/dashboard/berichten',
         employees: '/dashboard/wernemers',
-        agencyData: '/immokantoor-gegevens-bijwerken'
+        agencyData: '/dashboard/immokantoor-gegevens-bijwerken'
       },
       admin: {
 

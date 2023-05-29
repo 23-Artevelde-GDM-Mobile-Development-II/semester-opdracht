@@ -14,17 +14,18 @@ getFavoritesRouter.get("/", async (req, res) => {
         let favorites = await db.collection("favorites").find({userId}).toArray();
  
         if (favorites.length > 0) {
-            
+            console.log(favorites);
 
-            const favoriteRealEstatesData = [];
-
-            // Get all data from favorite real estates
-            favorites.map(async (favorite)=>{
-                let realEstateData = await db.collection("favorites").findOne({_id: favorite.houseId})
-
-                favoriteRealEstatesData.push(realEstateData);
-            });
-
+            const favoriteRealEstatesData = await Promise.all(
+                favorites.map(async (favorite) => {
+                    console.log('favorite', favorite);
+                  let realEstateData = await db.collection("realEstates").findOne({ _id: favorite.houseId });
+                  console.log(realEstateData);
+              
+                  return realEstateData;
+                })
+              );
+              
             return res.json(favoriteRealEstatesData);
 
         }else{

@@ -12,12 +12,12 @@ postFavoritesRouter.post("/:houseId", async (req, res) => {
     const loggedInUser = req.user;
 
     // Validation of the id
-    const { error } = idSchema.validate(houseId);
+    // const { error } = idSchema.validate(houseId);
 
-    if (error) {
-        const errorArray = error.details.map((err) => err.message);
-        return res.status(400).json({ errors: errorArray });
-    }
+    // if (error) {
+    //     const errorArray = error.details.map((err) => err.message);
+    //     return res.status(400).json({ errors: errorArray });
+    // }
 
     if(loggedInUser){
         // check if the favorite with the given userId and housId is already in the database.

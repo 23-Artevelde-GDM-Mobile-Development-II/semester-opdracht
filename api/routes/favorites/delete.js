@@ -2,11 +2,12 @@ import express from "express";
 
 import { db } from "../../db/mongo.js";
 import { idSchema } from "../../validators/idValidator.js";
+import { ObjectId } from "mongodb";
 
 const deleteFavoritesRouter = express.Router();
 
-// Get all favorites of the logged in user
-deleteFavoritesRouter.get("/:houseId", async (req, res) => {
+// Delete favorite of the logged in user with given id
+deleteFavoritesRouter.delete("/:houseId", async (req, res) => {
     const loggedInUser = req.user;
     const houseId = req.params.houseId;
 
@@ -21,10 +22,13 @@ deleteFavoritesRouter.get("/:houseId", async (req, res) => {
     if(loggedInUser){
         // check if the favorite with the given userId and housId is already in the database.
         const userId = loggedInUser._id;
-        let favorite = await db.collection("favorites").findOne({$and: [
-            {userId},
-            {houseId} 
-        ]});
+
+        console.log('UserrId', userId)
+        console.log('HouseId', houseId)
+        let favorite = await db.collection("favorites").findOne({
+            userId,
+            houseId: { $eq: new ObjectId(houseId) }
+        });
  
         if (favorite) {
             

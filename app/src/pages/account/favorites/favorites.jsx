@@ -1,106 +1,92 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './favorites.module.css';
 import DashboardAccountSidebar from '../../../components/Global/sidabars/dashboardAccountSidebar/dashboardAccountSidebar';
 import ROUTES from '../../../consts/routes';
 import GridCards from '../../../components/Global/grid/gridCards/gridCards';
 import RealEstateCard from '../../../components/Global/cards/realEstateCard/realEstateCard';
 import SIDEBAR_NAV_ITEMS from '../../../consts/sidebarNavItems';
+import useFetch from '../../../hooks/useFetch';
+import Loading from "../../../components/Global/loading/loading"
 
 function Favorites() {
-    return (
-        <div className={styles.container}>
-            <div className={styles.sidebar}>
-                <DashboardAccountSidebar 
-                navItems={SIDEBAR_NAV_ITEMS.account}
-                
-                activeItem={'Favorieten'}/>
 
-            </div>
+    const [favorites, setFavorites] = useState([]);
+    const {
+        isLoading,
+        error,
+        invalidate,
+        data
+    } = useFetch(`/myFavorites`);
 
-            <main className={styles.favoritesContainer}>
-                <h1>Favorieten</h1>
+    // Function to refetch favorites data
+    const fetchFavorites = useCallback(() => {
+        invalidate();
+    }, [invalidate]);
 
-                <div className="px-8">
-                    <GridCards>
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellingMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "a"
-                            }}
+    useEffect(() => {
+        if (data) {
+        setFavorites(data);
+        }
+    }, [data]);
 
-                            isLiked={true}
-                            isLoggedIn={true}
-                            userStatus={'regular user'}
-                            
-                        />
+    console.log('err',error);
 
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellingMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "a"
-                            }}
+    if(isLoading){
+        return <Loading/> 
+    }else{
 
-                            isLiked={true}
-                            isLoggedIn={true}
-                            userStatus={'regular user'}
-                            
-                        />
-
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellingMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "a"
-                            }}
-
-                            isLiked={true}
-                            isLoggedIn={true}
-                            userStatus={'regular user'}
-                            
-                        />
-                    </GridCards>
+        return (
+            <div className={styles.container}>
+                <div className={styles.sidebar}>
+                    <DashboardAccountSidebar 
+                    navItems={SIDEBAR_NAV_ITEMS.account}
+                    
+                    activeItem={'Favorieten'}/>
+    
                 </div>
-            </main>
-        </div>
-    );
+    
+                <main className={styles.favoritesContainer}>
+                    <h1>Favorieten</h1>
+    
+                    <div className="px-8">
+                        {error ? 
+                            <p>{error}</p>
+                        : 
+                        <GridCards>
+
+                            {data.map(realEstate => (
+                                <RealEstateCard key={realEstate._id}
+                                realEstateData={{
+                                    price: realEstate.realEstate.price,
+                                    type: realEstate.realEstate.type,
+                                    sellingMethode: realEstate.realEstate.sellingMethode,
+                                    street: realEstate.location.street,
+                                    houseNr: realEstate.location.number,
+                                    zipCode: realEstate.location.zipCode,
+                                    city: realEstate.location.city,
+                                    measurements: realEstate.realEstate.livingArea,
+                                    bedrooms: realEstate.layout.numberOfBedrooms,
+                                    bathrooms: realEstate.layout.numberOfBathrooms,
+                                    imgUrl: realEstate.images[0],
+                                    unavailable: false,
+                                    propertyId: realEstate._id,
+                                    epcLabel: realEstate.energy.epc
+                                }}
+
+                                isLiked={true}
+                                isLoggedIn={true}
+                                userStatus={'regular user'}
+        
+                            />
+                            ))}
+                        </GridCards>
+                        }
+                        
+                    </div>
+                </main>
+            </div>
+        );
+    }
 }
 
 export default Favorites;

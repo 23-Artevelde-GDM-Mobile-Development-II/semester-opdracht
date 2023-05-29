@@ -5,6 +5,11 @@ import styles from './personalData.module.css';
 import InputWithLabel from '../../../components/Global/formInputs/input/inputWithLabel/inputWithLabel';
 import SIDEBAR_NAV_ITEMS from '../../../consts/sidebarNavItems';
 import ROUTES from '../../../consts/routes';
+import { useAuthContext } from '../../../contexts/AuthContainer';
+import useMutation from '../../../hooks/useMutation';
+
+// import { useAuthContext } from '../../../contexts/AuthContainer';
+// import { useAuthContext } from '../../../contexts/AuthContainer.js';
 
 
 function PersonalData({routePath}) {
@@ -12,13 +17,16 @@ function PersonalData({routePath}) {
     const isUpdatePersonalDataPage = (routePath === ROUTES.account.personalData);
     const [formValues, setFormvalues] = useState({});
 
+    const  {user, login} = useAuthContext();
+    const { isLoading, error, mutate } = useMutation();
+
     useEffect(()=>{
         if(isUpdatePersonalDataPage){
             setFormvalues({
-                firstName: '',
-                lastName: '',
-                email: '',
-                phoneNr: undefined
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNr: user.phoneNr
         
             })
         }else{
@@ -31,9 +39,7 @@ function PersonalData({routePath}) {
         
             })
         }
-    }, [isUpdatePersonalDataPage]);
-
-    console.log(isUpdatePersonalDataPage);
+    }, [isUpdatePersonalDataPage, user]);
 
     
 
@@ -47,6 +53,23 @@ function PersonalData({routePath}) {
             }
         })
     }
+
+
+    const submitUserDataModifications = (e) => {
+        e.preventDefault();
+        mutate(`${process.env.REACT_APP_API_URL}/loggedInUser`, {
+        method: "PATCH",
+        data: formValues,
+        onSuccess: (data) => {
+            console.log(data);
+            login(data);
+        },
+        });
+    };
+
+    const submitAgencyDataModifications = (e) => {
+        
+    };
 
     return (
         <div className={styles.container}>
@@ -62,20 +85,22 @@ function PersonalData({routePath}) {
                 <h1>{isUpdatePersonalDataPage? 'Persoonlijke gegevens': 'Gegevens immokantoor'}</h1>
 
                 {isUpdatePersonalDataPage? 
-                <div>
+                <form onSubmit={submitUserDataModifications}>
                     <div className={styles.name}>
-                        <InputWithLabel inputType={'text'} name={'firstName'} value={formValues.firstName} labelText={'Voornaam'} handleChange={updateFormValues}/>
+                        <InputWithLabel inputType={'text'} name={'firstname'} value={formValues.firstname} labelText={'Voornaam'} handleChange={updateFormValues}/>
 
-                        <InputWithLabel  inputType={'text'} name={'lastName'} value={formValues.lastName} labelText={'Achternaam'} handleChange={updateFormValues}/>
+                        <InputWithLabel  inputType={'text'} name={'lastname'} value={formValues.lastname} labelText={'Achternaam'} handleChange={updateFormValues}/>
                     </div>
 
                     <InputWithLabel inputType={'email'} name={'email'} value={formValues.email} labelText={'E-mail'} handleChange={updateFormValues}/>
 
-                    <InputWithLabel inputType={'number'} name={'phoneNumber'} value={formValues.phoneNr} labelText={'telefoon nummer'} handleChange={updateFormValues}/>
+                    <InputWithLabel inputType={'number'} name={'phoneNr'} value={formValues.phoneNr} labelText={'telefoon nummer'} handleChange={updateFormValues}/>
 
-                </div>
+                    <button className={styles.submitBtn}>Wijzigingen opslaan</button>
+
+                </form>
                 : 
-                <div>
+                <form onSubmit={submitAgencyDataModifications}>
                     <InputWithLabel inputType={'text'} name={'name'} value={formValues.name} labelText={'Naam'} handleChange={updateFormValues}/>
                     
                     <div className={styles.imageContainer}>
@@ -89,7 +114,9 @@ function PersonalData({routePath}) {
 
                     <InputWithLabel inputType={'number'} name={'phoneNumber'} value={formValues.phoneNr} labelText={'telefoon nummer'} handleChange={updateFormValues}/>
 
-                </div>
+                    <button className={styles.submitBtn}>Wijzigingen opslaan</button>
+
+                </form>
                 }
                 
             </main>

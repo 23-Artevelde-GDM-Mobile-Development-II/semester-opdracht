@@ -17,7 +17,7 @@ const useFetch = (path) => {
     // Make a fetch request to the API endpoint with the appropriate Authorization header
     fetch(`${process.env.REACT_APP_API_URL}${path}`, {
       headers: { 
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `${user._id}`,
       },
     })
       // Handle any errors that may occur in the response
@@ -29,15 +29,15 @@ const useFetch = (path) => {
         console.log(error)
         try{
           
-        const errormessage = await error.json()
-        .then(response => response.error ?? String(error))
-        .then(response => {if(response === "Token expired")
-        {
-          setGlobalError("Token expired");
-          logout();
-        }
+        const errormessage = await error.statusText;
+        // .then(response => response.error ?? String(error))
+        // .then(response => {if(response === "Token expired")
+        // {
+        //   setGlobalError("Token expired");
+        //   logout();
+        // }
         
-        } )
+        // } )
 
         isCurrent && setError(errormessage)
         }
@@ -48,7 +48,7 @@ const useFetch = (path) => {
 
     // Return a cleanup function that sets isCurrent to false when the component is unmounted
     return () => (isCurrent = false);
-  }, [path, logout, setGlobalError, user.token]);
+  }, [path, logout, setGlobalError, user._id]);
  
   // Call the fetchData function when the component mounts or when path or userId change
   useEffect(() => {

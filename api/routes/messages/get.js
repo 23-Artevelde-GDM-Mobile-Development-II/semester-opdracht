@@ -14,7 +14,7 @@ getMessagesRouter.get("/inbox/all", async (req, res) => {
             receiverId: new ObjectId(loggedInUser._id)
         }).toArray();
 
-        if(inboxMessages.length > 1){
+        if(inboxMessages.length > 0){
             return res.json(inboxMessages);
 
         }else{
@@ -59,35 +59,48 @@ getMessagesRouter.get("/:messageId", async (req, res) => {
         return res.status(400).json({ errors: errorArray });
     }
 
-    if(loggedInUser){
-
-        const conversation = {};
-
-        const message = await db.collection("messages").findOne({
+    if (loggedInUser) {
+        try {
+          const conversation = {};
+    
+          // Retrieve the message with the given messageId
+          const message = await db.collection("messages").findOne({
             _id: new ObjectId(messageId)
-        });
-
-        if(message){
-          conversation.messageContent = message;
-
-          const isReply = await db.collection("messageReplies").findOne({
-            messageId: new ObjectId(messageId)
           });
-
-          if(isReply){
-              const repliedMessage = await db.collection("messages").findOne({
-                  _id: new ObjectId(isReply.repliedMessageId)
-              }); 
-
-              conversation.repliedMessage = repliedMessage;
-          }else{
-            conversation.repliedMessage = null;
+    
+          if (!message) {
+            return res.status(404).json({ message: "There are no messages with this id." });
           }
-
-
+    
+          conversation.messageContent = message;
+    
+          // Retrieve the sender data by performing a left outer join with the "users" collection
+          const sender = await db.collection("users").findOne({
+            _id: new ObjectId(message.senderId)
+          });
+    
+          if (!sender) {
+            return res.status(404).json({ message: "Sender data not found." });
+          }
+    
+          conversation.sender = sender;
+    
+          // Retrieve the real estate data by performing a left outer join with the "realEstates" collection
+          const realEstate = await db.collection("realEstates").findOne({
+            _id: new ObjectId(message.propertyId)
+          });
+    
+          if (!realEstate) {
+            return res.status(404).json({ message: "Real estate data not found." });
+          }
+    
+          conversation.realEstate = realEstate;
+    
+          // Return the conversation object containing the message, sender, and real estate data
           res.json(conversation);
-        }else{
-          res.status(404).json({message: 'There are no messages with this id.'})
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ message: "An error occurred while retrieving the message data." });
         }
 
     }else{

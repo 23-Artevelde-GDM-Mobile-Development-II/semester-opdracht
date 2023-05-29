@@ -34,20 +34,43 @@ function AddEditRealEstate({realEstateData, isNew}) {
             hasSolarPanels: false,
             epc: 'a'
 
-        }
+        }, 
+        description: ""
 
     });
 
     function updateFormValues(e) {
-        const {name, value} = e.target;
-        console.log(e.currentTarget);
-        setFormvalues(prevFormValues => {
-            return {
-                ...prevFormValues,
-                [name]: value
-            }
-        })
+        const {name, value, type} = e.target;
+        const [nestedKey, nestedProperty] = name.split(".");
+ 
+        if (type === "textarea") {
+            setFormvalues((prevFormValues) => ({
+              ...prevFormValues,
+              [name]: value,
+            }));
+        } else {
+            setFormvalues((prevFormValues) => ({
+              ...prevFormValues,
+              [nestedKey]: {
+                ...prevFormValues[nestedKey],
+                [nestedProperty]: value,
+              },
+            }));
+        }
     }
+
+
+    function handleImageChange(e) {
+        const files = Array.from(e.target.files);
+        const fileURLs = files.map((file) => URL.createObjectURL(file));
+      
+        setFormvalues((prevFormValues) => ({
+          ...prevFormValues,
+          images: fileURLs,
+        }));
+    }
+
+    console.log(formValues);
 
 
     return (
@@ -64,7 +87,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                 <div className={styles.justifyBetween}>
                     <div>
                         <h1>Pand {isNew ? 'toevoegen' : 'wijzigen'}</h1>
-                        <p><span></span> {isNew || !(realEstateData.isPublished) ? 'Nog niet gepubliceerd' : 'Gepubliceerd'}</p>
+                        <p><span className={isNew || !(realEstateData.isPublished) ? styles.redDot: styles.greenDot}></span> {isNew || !(realEstateData.isPublished) ? 'Nog niet gepubliceerd' : 'Gepubliceerd'}</p>
                     </div>
                     
                     {
@@ -80,17 +103,28 @@ function AddEditRealEstate({realEstateData, isNew}) {
                     <div>
                         <h2>Afbeeldingen</h2>
                         
-                        <div className={styles.whiteContainer}>
+                        <div className={`${styles.whiteContainerWithoutGrid}`}>
+                            <div className={styles.imageContainer}>
+                                <img src="https://ucarecdn.com/cb288972-b141-4509-94ac-02c4dbeb77da/109_1179703_1.jpg" alt="" />
+                                <img src="https://ucarecdn.com/cb288972-b141-4509-94ac-02c4dbeb77da/109_1179703_1.jpg" alt="" />
+                                <img src="https://ucarecdn.com/cb288972-b141-4509-94ac-02c4dbeb77da/109_1179703_1.jpg" alt="" />
+                                <img src="https://ucarecdn.com/cb288972-b141-4509-94ac-02c4dbeb77da/109_1179703_1.jpg" alt="" />
 
+                            </div>
+                            
+                            <div>
+                                <label htmlFor="image">Afbeelding downloaden</label>
+                                <input type="file" name="image" id="image" accept="image/*" multiple onChange={handleImageChange}/>
+                            </div>
+                           
                         </div>
-
-                   
                     </div>
+
 
                     <div>
                         <h2>Gebouw</h2>
                         <div className={styles.whiteContainer}>
-                            <SelectWithLabel handleChange={updateFormValues} name={'type'} labelText={'Type pand'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} name={'realEstate.type'} labelText={'Type pand'} options={[
                                 {
                                     label: 'Huis',
                                     value: 'house'
@@ -121,7 +155,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.realEstate.type}
                             />
 
-                            <SelectWithLabel handleChange={updateFormValues} labelText={'Subtype'} name={'subType'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} labelText={'Subtype'} name={'realEstate.subType'} options={[
                                 {
                                     label: 'Vila',
                                     value: 'vila'
@@ -135,7 +169,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.realEstate.subType}
                             />
 
-                            <SelectWithLabel handleChange={updateFormValues} labelText={'Verhuur of verkoop'} name={'sellingMethod'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} labelText={'Verhuur of verkoop'} name={'realEstate.sellingMethod'} options={[
                                 {
                                     label: 'Verhuren',
                                     value: 'rent-out'
@@ -149,12 +183,12 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.realEstate.sellingMethod}
                             />
 
-                            <InputWithLabel inputType={'number'} name={'price'} value={formValues.realEstate.price} labelText={'Prijs'} handleChange={updateFormValues}/>
+                            <InputWithLabel inputType={'number'} name={'realEstate.price'} value={formValues.realEstate.price} labelText={'Prijs'} handleChange={updateFormValues}/>
 
-                            <InputWithLabel  inputType={'number'} name={'livingArea'} value={formValues.realEstate.livingArea} labelText={'Bewoonbare oppervlakte (m²)'} handleChange={updateFormValues}/>
+                            <InputWithLabel  inputType={'number'} name={'realEstate.livingArea'} value={formValues.realEstate.livingArea} labelText={'Bewoonbare oppervlakte (m²)'} handleChange={updateFormValues}/>
 
 
-                            <InputWithLabel inputType={'number'} name={'constructionYear'} value={formValues.realEstate.constructionYear} labelText={'Bouwjaar'} handleChange={updateFormValues}/>
+                            <InputWithLabel inputType={'number'} name={'realEstate.constructionYear'} value={formValues.realEstate.constructionYear} labelText={'Bouwjaar'} handleChange={updateFormValues}/>
 
                         </div>
                     </div>
@@ -162,7 +196,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                     <div>
                         <h2>Terein/ buiten</h2>
                         <div className={styles.whiteContainer}>
-                            <SelectWithLabel handleChange={updateFormValues} name={'gardenAvailable'} labelText={'Tuin aanwezig'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} name={'outside.gardenAvailable'} labelText={'Tuin aanwezig'} options={[
                                 {
                                     label: 'Nee',
                                     value: false
@@ -176,7 +210,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.outside.gardenAvailable}
                             />
 
-                            <SelectWithLabel handleChange={updateFormValues} name={'terraceAvailable'} labelText={'Terras aanwezig'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} name={'outside.terraceAvailable'} labelText={'Terras aanwezig'} options={[
                                 {
                                     label: 'Nee',
                                     value: false
@@ -190,7 +224,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.outside.terraceAvailable}
                             />
 
-                            <SelectWithLabel handleChange={updateFormValues} labelText={'Balkon aanwezig'} name={'balconyAvailable'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} labelText={'Balkon aanwezig'} name={'outside.balconyAvailable'} options={[
                                 {
                                     label: 'Nee',
                                     value: false
@@ -204,7 +238,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.outside.balconyAvailable}
                             />
 
-                            <SelectWithLabel handleChange={updateFormValues} labelText={'Parking aanwezig'} name={'parkingAvailable'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} labelText={'Parking aanwezig'} name={'outside.parkingAvailable'} options={[
                                 {
                                     label: 'Nee',
                                     value: false
@@ -219,7 +253,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             />
 
 
-                            <InputWithLabel inputType={'number'} name={'landAcreage'} value={formValues.outside.landAcreage} labelText={'Perceeloppervlakte (m²)'} handleChange={updateFormValues}/>
+                            <InputWithLabel inputType={'number'} name={'outside.landAcreage'} value={formValues.outside.landAcreage} labelText={'Perceeloppervlakte (m²)'} handleChange={updateFormValues}/>
 
                         </div>
                     </div>
@@ -227,16 +261,16 @@ function AddEditRealEstate({realEstateData, isNew}) {
                     <div>
                         <h2>Indeling</h2>
                         <div className={styles.whiteContainer}>
-                            <InputWithLabel inputType={'number'} name={'numberOfBedrooms'} value={formValues.layout.numberOfBedrooms} labelText={'Aantal slaapkamers'} handleChange={updateFormValues}/>
+                            <InputWithLabel inputType={'number'} name={'layout.numberOfBedrooms'} value={formValues.layout.numberOfBedrooms} labelText={'Aantal slaapkamers'} handleChange={updateFormValues}/>
 
-                            <InputWithLabel inputType={'number'} name={'numberOfBathrooms'} value={formValues.layout.numberOfBathrooms} labelText={'Aantal badkamers'} handleChange={updateFormValues}/>
+                            <InputWithLabel inputType={'number'} name={'layout.numberOfBathrooms'} value={formValues.layout.numberOfBathrooms} labelText={'Aantal badkamers'} handleChange={updateFormValues}/>
                         </div>
                     </div>
 
                     <div>
                         <h2>Energie</h2>
                         <div className={styles.whiteContainer}>
-                            <SelectWithLabel handleChange={updateFormValues} name={'glassType'} labelText={'Type beglazing'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} name={'energy.glassType'} labelText={'Type beglazing'} options={[
                                 {
                                     label: 'Dubbel glas',
                                     value: 'double'
@@ -250,10 +284,10 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.energy.glassType}
                             />
 
-                            <InputWithLabel inputType={'text'} name={'heatingSource'} value={formValues.energy.heatingSource} labelText={'Verwarmingsbron'} handleChange={updateFormValues}/>
+                            <InputWithLabel inputType={'text'} name={'energy.heatingSource'} value={formValues.energy.heatingSource} labelText={'Verwarmingsbron'} handleChange={updateFormValues}/>
 
 
-                            <SelectWithLabel handleChange={updateFormValues} name={'hasSolarPanels'} labelText={'Heeft zonnepannelen'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} name={'energy.hasSolarPanels'} labelText={'Heeft zonnepannelen'} options={[
                                 {
                                     label: 'Nee',
                                     value: false
@@ -267,7 +301,7 @@ function AddEditRealEstate({realEstateData, isNew}) {
                             activeOption={formValues.energy.hasSolarPanels}
                             />
 
-                            <SelectWithLabel handleChange={updateFormValues} labelText={'EPC-waarde'} name={'epc'} options={[
+                            <SelectWithLabel handleChange={updateFormValues} labelText={'EPC-waarde'} name={'energy.epc'} options={[
                                 {
                                     label: 'A',
                                     value: 'a'
@@ -301,6 +335,13 @@ function AddEditRealEstate({realEstateData, isNew}) {
                     </div>
 
                     <div>
+                        <h2>Omschrijving</h2>
+                        <div className={styles.whiteContainer}>
+                            <textarea value={formValues.description} onChange={updateFormValues} name={'description'}/>
+                        </div>
+                    </div>
+
+                    <div className={styles.btnPosition}>
                         <div>
                             <button className={styles.secondaryBtn}>Opslaan</button>
                             <button className={styles.primaryBtn}>Opslaan & publiceren</button>

@@ -16,6 +16,7 @@ import LogIn from "../authorization/logIn";
 import Register from "../authorization/register";
 // import LoginContainer from "../authorization/logic/loginContainer";
 import EmployeesTable from "../dashboard/agency/employees/employees";
+import AuthContainer from "../../contexts/AuthContainer";
 
 const Authentication = () => {
 
@@ -23,6 +24,7 @@ const Authentication = () => {
         <div className={`${style.wrap}`}>
             <Router>
                 <Header />
+                <AuthContainer>
                     <Routes>
                         <Route path={ROUTES.login} element={<LogIn />}/>
                         {/* <Route path={ROUTES.login} element={<LoginContainer />}/> */}
@@ -31,7 +33,10 @@ const Authentication = () => {
                         <Route path={ROUTES.home} element={<Home />}/>
                         <Route path={ROUTES.searchRealEstate} element={<SearchRealEstate/>} />
                         <Route path={ROUTES.realEstateDetail} element={<RealEstateDetail/>} />
-                        <Route path={ROUTES.account.personalData} element={<PersonalData routePath={ROUTES.account.personalData}/>} />
+                       
+                            <Route path={ROUTES.account.personalData} element={<PersonalData routePath={ROUTES.account.personalData}/>} />
+                        
+                        
                         <Route path={ROUTES.account.favorites} element={<Favorites/>} />
                         <Route path={ROUTES.account.messages} element={<Messages userStatus={'regular user'}/>} />
 
@@ -53,7 +58,7 @@ const Authentication = () => {
 
                         <Route path='*' element={<NotFound/>} />
                     </Routes>
-
+                </AuthContainer>
                 <Footer />
             </Router>
         </div>

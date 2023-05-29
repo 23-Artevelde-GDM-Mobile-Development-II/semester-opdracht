@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import LogIn from "../pages/authorization/logIn";
 
+
 // Define the key used to store the user in local storage
-const KEY = "SVS_USER";
+const KEY = "IMMO_USER";
 
 // Create a new context object for authentication
 const AuthContext = createContext();
@@ -18,9 +19,10 @@ const getUserFromStorage = () => {
 
 // AuthContainer component that wraps child components with authentication functionality
 const AuthContainer = ({ children }) => {
+
   // Initialize user state using the getUserFromStorage function
   const [user, setUser] = useState(getUserFromStorage());
-  const [globalError, setGlobalError] = useState()
+  const [globalError, setGlobalError] = useState();
 
   // useEffect hook to store user object in local storage when it changes
   useEffect(() => {
@@ -38,16 +40,17 @@ const AuthContainer = ({ children }) => {
 
   // Function to set user state to a user object when user logs in
   const handleLogin = (user) => {
-    console.log('LISA BLAFT ________');
+    // fetch(`${process.env.REACT_APP_API_URL}/users/${user._id}/role`)
+    // .then(res => res.json())
+    // .then(data => );
     setUser(user);
-    setGlobalError(null);
-
+    setGlobalError(null)
   };
 
   // If user exists, wrap child components with the AuthContext Provider and pass user and logout function as props
   if (user) {
     return (
-      <AuthContext.Provider value={{ user, handleLogout, setGlobalError,  handleLogin}}>
+      <AuthContext.Provider value={{ user: user, logout: handleLogout, setGlobalError: setGlobalError, login: handleLogin }}>
         {children}
       </AuthContext.Provider>
     );

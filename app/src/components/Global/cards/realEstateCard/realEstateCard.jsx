@@ -3,6 +3,9 @@ import LikeBtn from "../../btns/likeBtn/likeBtn";
 import EditRemoveBtn from "../../btns/editRemoveBtn/editRemoveBtn";
 
 import styles from './realEstateCard.module.css';
+import { useEffect, useState } from "react";
+import useMutation from "../../../../hooks/useMutation";
+import { useAuthContext } from "../../../../contexts/AuthContainer";
 
 function RealEstateCard({realEstateData, isLiked, handleClickDelete, handleClickEdit, isLoggedIn, userStatus}) {
 
@@ -34,6 +37,34 @@ function RealEstateCard({realEstateData, isLiked, handleClickDelete, handleClick
       break;
   }
   
+  const [liked, setLiked] = useState(isLiked);
+
+  const { isLoading, error, mutate } = useMutation();
+
+  const handleLike = async () => {
+    const realEstateId = realEstateData.propertyId;
+    console.log(realEstateData);
+    try {
+      if (liked) {
+        // Remove from favorites
+        mutate(`${process.env.REACT_APP_API_URL}/myFavorites/${realEstateId}`, {
+          method: "DELETE",
+          onSuccess: (data) => {
+              console.log(data);
+          },
+        });
+        setLiked(false);
+      } else {
+        // Add to favorites
+        
+        setLiked(true);
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+
+
   return (
     <div className={`card ${styles.card}`}>
       <div className={styles.imgContainer} style={{backgroundImage: `url(${realEstateData.imgUrl})`}}>
@@ -42,7 +73,7 @@ function RealEstateCard({realEstateData, isLiked, handleClickDelete, handleClick
 
           userStatus === 'regular user' ?  
             <div className={styles.likeBtnPosition}>
-              <LikeBtn liked={isLiked}/>
+              <LikeBtn liked={isLiked} actionFunc={handleLike}/>
             </div>
 
             :

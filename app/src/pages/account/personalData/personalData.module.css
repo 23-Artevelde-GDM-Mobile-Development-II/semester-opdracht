@@ -34,6 +34,29 @@
     display: block;
 }
 
+
+
+.submitBtn{
+    width: 100%;
+    margin: 2rem 0;
+    /* w-full mt-12 */
+    background-color: #536DFE;
+    padding: 1em;
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: 200ms;
+    border: none;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.submitBtn:hover{
+    background-color: #2e49e1;
+    font-weight: 600;
+}
+
+
 @media only screen and (min-width: 600px) {
     .container{
         display: flex;

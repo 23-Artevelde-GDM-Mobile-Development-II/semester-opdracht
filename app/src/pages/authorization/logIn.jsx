@@ -10,9 +10,9 @@ import { useAuthContext } from "../../contexts/AuthContainer";
 // import { useAuthContext } from "../../contexts/AuthContainer";
 
 
-function LogIn({initialError }) {
+function LogIn({onLogin, initialError }) {
   
-    const { handleLogin } = useAuthContext;
+    // const { handleLogin } = useAuthContext;
 
     const [formData, setFormData] = useState({
         email: "",
@@ -41,7 +41,7 @@ function LogIn({initialError }) {
         data: formData,
         onSuccess: (data) => {
             console.log(data);
-            handleLogin(data);
+            onLogin(data);
         },
         });
     };
@@ -64,7 +64,7 @@ function LogIn({initialError }) {
             <div className={styles.authorizationCard}>
     
 
-                <div className={styles.cardContent}>
+                <form className={styles.cardContent} onSubmit={handleSubmit}>
                     <h2 className={styles.title}>Log in</h2>
 
                     {/* {(() => {
@@ -77,8 +77,7 @@ function LogIn({initialError }) {
                         error && 
                         error.map((err, i)=> (
                             <p key={i} className={styles.errorMessage}>{err}</p>
-                        ))
-                        
+                        ))  
                     }
 
                     
@@ -87,13 +86,13 @@ function LogIn({initialError }) {
                     <PasswordWithLabel name={"password"} labelText={"Wachtwoord"} value={formData.password} handleChange={updateFormData}/>
                     
 
-                    <button className={styles.submitBtn} disabled={isLoading} onClick={handleSubmit}>Log in</button>
+                    <button className={styles.submitBtn} disabled={isLoading}>Log in</button>
 
                     <div className={styles.toOtherPage}>
                         <span>Heb je nog geen account?</span><Link to={ROUTES.register}>Registreer je hier</Link>
                     </div>
                         
-                </div>
+                </form>
 
                 {/* image */}
                 {/* <div className=""> */}

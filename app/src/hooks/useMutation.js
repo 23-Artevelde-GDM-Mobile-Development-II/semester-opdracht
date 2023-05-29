@@ -23,7 +23,8 @@ const useMutation = () => {
 
     // Only add the user authentication data to headers if it exists
     if (auth && auth.user) {
-      headers.Authorization = `Bearer ${auth.user.token}`;
+      headers.Authorization = `${auth.user._id}`;
+      console.log(auth.user._id);
     }
 
     try {
@@ -44,16 +45,33 @@ const useMutation = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      let errorData;
-      try{
-        const tempData = await error.json();
-        errorData = tempData.error;
+    //   let errorData;
+    //   try{
+    //     const tempData = await error.json();
+    //     errorData = tempData.error;
 
-        console.log('!!! tempDATA: ', tempData);
-        console.log('!!! errDATA: ', errorData);
+    //     console.log('!!! tempDATA: ', tempData);
+    //     console.log('!!! errDATA: ', errorData);
+    //   } catch (ex) {
+    //     errorData = error.statusText;
+    //     console.log('!!! errDATA_____: ', errorData);
+    //   }
+    //   // If there's an error callback, call it with the error, otherwise set the error state and loading state to false
+    //   if (options.onError) {
+    //     options.onError(error);
+    //   } else {
+    //     setIsLoading(false);
+    //     setError(errorData);
+    //   }
+    // }
+
+
+    let errorData;
+      try {
+        const tempData = await error.json();
+        errorData = [tempData.error];
       } catch (ex) {
-        errorData = error.statusText;
-        console.log('!!! errDATA_____: ', errorData);
+        errorData = [error.statusText];
       }
       // If there's an error callback, call it with the error, otherwise set the error state and loading state to false
       if (options.onError) {
