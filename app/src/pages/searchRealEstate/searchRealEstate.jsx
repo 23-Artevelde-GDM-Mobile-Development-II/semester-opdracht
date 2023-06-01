@@ -1,40 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GridCards from '../../components/Global/grid/gridCards/gridCards';
 import RealEstateCard from '../../components/Global/cards/realEstateCard/realEstateCard';
 
 import styles from './searchRealEstate.module.css';
-import FilterSidebar from '../../components/searchPage/filterSidebar/filterSidebar';
+import FilterSidebar from '../../components/searchPage/sidebar/filterSidebar/filterSidebar';
 import CheckboxToggle from '../../components/Global/formInputs/checkbox/checkboxToggle/checkboxToggle';
+import useFetch from '../../hooks/useFetch';
+import Select from '../../components/Global/formInputs/select/select'
+import Input from '../../components/Global/formInputs/input/input';
+import InputWithLabel from '../../components/Global/formInputs/input/inputWithLabel/inputWithLabel';
+import SelectWithLabel from '../../components/Global/formInputs/select/selectWithLabel/selectWithLabel';
+import SearchSidebar from '../../components/searchPage/sidebar/searchSidebar';
+import { useSearchParams } from 'react-router-dom';
+import useMutation from '../../hooks/useMutation';
 
 function SearchRealEstate(props) {
-
-
-    // const [toggleFilterOptions, setToggleFilterOptions] = useState({
-    //     realEstateType: false,
-    //     buildingType: false,
-    //     location: false,
-    //     price: false,
-    //     acreage: false,
-    //     rooms: false,
-    //     outside: false,
-    //     energie: false
-    // })
-    const [toggleFilterOptions, setToggleFilterOptions] = useState({
-        realEstateType: false,
-        buildingType: false,
-        location: false,
-        price: false,
-        acreage: false,
-        rooms: false,
-        outside: false,
-        energie: false
-    })
-
-    // const [toggleMainCheckboxes, setToggleMainCheckboxes] = useState({
-    //     house: false,
-    //     appartement: false,
-    //     test: false
-    // })
 
 
     // function changeToggleFilterOptions(optionName) {
@@ -47,94 +27,44 @@ function SearchRealEstate(props) {
 
     // }
 
+    const { isLoading, error, mutate } = useMutation();
+
+    const [filter, setFilter] = useState({
+        filterParams: {},
+        orderBy: 'recentst',
+        sellingMethod: 'renting'
+    });
+    
+
+    const [realEstatesData, setRealEstateData] = useState([]);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    // searchParams.get("__firebase_request_key");
+    console.log(searchParams.get("appatement"));
+
+
+
+    useEffect(()=>{
+        mutate(`${process.env.REACT_APP_API_URL}/realEstates/sellingMethod/${filter.sellingMethod}`, {
+        method: "GET",
+        data: filter.filterParams,
+        onSuccess: (data) => {
+            setRealEstateData(data);
+            console.log(data);
+        },
+        });
+
+    }, [filter, searchParams]);
+
+    console.log('realEstates', realEstatesData)
+    console.log(error);
+
+
     return (
         <div className={styles.pageContainer}>
 
             {/* SIDEBAR WITH FILTERS */}
-            <aside>
-                <h2>Zoekcriteria</h2>
-
-                <div className={styles.switch}>
-                    <p className={styles.active}>Te koop</p>
-                    <p>Te huur</p>
-                </div>
-
-                <div>
-                    <FilterSidebar filterNameDutch={'Type pand'}>
-
-                    <div className={styles.checkboxMain}>
-                            <i className="fa-solid fa-chevron-right"></i>
-
-                            <input type="checkbox" name="main-house"
-                            id="main-house"/>
-                            <label htmlFor="main-house">Huis</label>
-
-                            <div className={styles.subContent}>
-                                <div className={styles.checkboxSub}>
-                                    <input type="checkbox" name="house" id="house"/>
-                                    <label htmlFor="house">Huis</label>
-                                </div>
-
-                                <div className={styles.checkboxSub}>
-                                    <input type="checkbox" name="villa" id="villa"/>
-                                    <label htmlFor="villa">villa</label>
-                                </div>
-                                <div className={styles.checkboxSub}>
-                                    <input type="checkbox" name="herenhuis" id="herenhuis"/>
-                                    <label htmlFor="herenhuis">Herenhuis</label>
-                                </div>
-                                <div className={styles.checkboxSub}>
-                                    <input type="checkbox" name="bungalow" id="bungalow"/>
-                                    <label htmlFor="bungalow">Bungalow</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <CheckboxToggle 
-                        labelName={'Test'}
-                        inputName={'test'}
-                        >
-                            <input type="checkbox" name={`kpop`} id={`kpop`} />
-                            <label htmlFor={`kpop`}>KPOP</label>
-                        </CheckboxToggle>
-
-                        <div className={styles.checkboxMain}>
-                            <i className="fa-solid fa-chevron-right"></i>
-
-                            <input type="checkbox" name="main-appartement"
-                            id="main-appartement"/>
-                            <label htmlFor="main-appartement">Appartement</label>
-
-                            <div className={styles.subContent}>
-                                <div className={styles.checkboxSub}>
-                                    <input type="checkbox" name="appartement" id="appartement"/>
-                                    <label htmlFor="appartement">Appartement</label>
-                                </div>
-
-                                <div className={styles.checkboxSub}>
-                                    <input type="checkbox" name="gelijkvloers" id="gelijkvloers"/>
-                                    <label htmlFor="gelijkvloers">Gelijkvloers</label>
-                                </div>
-                                
-                            </div>
-                        </div>
-
-
-                        <div className={styles.checkboxMain}>
-                    
-                            <input type="checkbox" name="main-kot"
-                            id="main-kot"/>
-                            <label htmlFor="main-kot">Kot</label>
-                        </div>
-                    </FilterSidebar>
-
-
-                    <FilterSidebar filterNameDutch={'Type bebouwing'}>
-                    <p>Zie je dit + kun je dit togglen??</p>
-                </FilterSidebar>
-                </div>
-
-            </aside>
+            <SearchSidebar sellingMethod={filter.sellingMethod}/>
 
             {/* MAIN CONTENT */}
             <main>
@@ -163,6 +93,7 @@ function SearchRealEstate(props) {
                 {/* CARDS */}
                 <div className="px-8">
                     <GridCards>
+                        {/* <RealEstateCard/> */}
                     <RealEstateCard 
                             realEstateData={{
                                 price: "650",
