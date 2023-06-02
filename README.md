@@ -3,3 +3,16 @@
 
 APP url: [semester-opdracht-app-production.up.railway.app ](https://semester-opdracht-app-production.up.railway.app/)
 API url: [semester-opdracht-api-production.up.railway.app](https://semester-opdracht-api-production.up.railway.app/)
+
+Accounts: 
+- Normale gebruiker: 
+email: user@gmail.com
+Wachtwoord: secret123
+
+- Makelaar: 
+email: makelaar@gmail.com
+Wachtwoord: secret123
+
+- admin
+email: admin@gmail.com
+Wachtwoord: secret123
