@@ -4,11 +4,12 @@ import { db } from "../../db/mongo.js";
 import { realEstateAgentMiddleware } from "../../middleware/realEstateAgentMiddleware.js";
 import { getRealEstate } from "../../validators/realEstateValidator.js";
 import { idSchema } from "../../validators/idValidator.js";
+import { adminMiddleware } from "../../middleware/adminMiddleware.js";
 
 const getRealEstatesRouter = express.Router();
 
 // Get all real estates with or without filter (mostRecent, oldest, cheapest, mostExpensive)
-getRealEstatesRouter.get("/sellingMethod/:sellingMethod", async (req, res) => {
+getRealEstatesRouter.post("/sellingMethod/:sellingMethod", async (req, res) => {
   const sellingMethod = req.params.sellingMethod;
   const sortBy = req.query.sortBy
 
@@ -74,12 +75,15 @@ getRealEstatesRouter.get("/sellingMethod/:sellingMethod", async (req, res) => {
 
             if (sortBy === "mostRecent") {
                 sortOptions = { publishDate: -1 }; 
+
             } else if (sortBy === "oldest") {
-                sortOptions = { publishDate: 1 }; // Sort by ascending order of createdAt field
+                sortOptions = { publishDate: 1 };
+
             } else if (sortBy === "cheapest") {
-                sortOptions = { 'realEstate.price': 1 }; // Sort by ascending order of price field
+                sortOptions = { 'realEstate.price': 1 }; 
+
             } else if (sortBy === "mostExpensive") {
-                sortOptions = { 'realEstate.price': -1 }; // Sort by descending order of price field
+                sortOptions = { 'realEstate.price': -1 }; 
             }
 
             const realEstates = await query.sort(sortOptions).toArray();
@@ -98,10 +102,30 @@ getRealEstatesRouter.get("/sellingMethod/:sellingMethod", async (req, res) => {
         
 });
 
-// Get all real estates even if they are offline or not available anymore (real estate agent & admin route)
-getRealEstatesRouter.get("/", realEstateAgentMiddleware, async (req, res) => {
+// Get all real estates even if they are offline or not available anymore ( admin route)
+getRealEstatesRouter.get("/", adminMiddleware, async (req, res) => {
   const realEstates = await db.collection("realEstates").find().toArray();
   res.json(realEstates);
+});
+
+
+// Get all real estates even if they are offline or not available anymore (real estate agent & admin route)
+getRealEstatesRouter.get("/own/", realEstateAgentMiddleware, async (req, res) => {
+
+  const id = req.user._id;
+
+  const agency = await db.collection("employees").findOne({
+    userId: id,
+  });
+
+  if (agency) {
+    const realEstates = await db.collection("realEstates").find({
+      agencyId: agency.realEstateAgencyId.toHexString()
+    }).toArray();
+    res.json(realEstates);
+  } else {
+    return res.status(404).json({ error: "You are not assigned to a real estate agency." });
+  }
 });
 
 // Get real estate by id
@@ -120,8 +144,25 @@ getRealEstatesRouter.get("/realEstateId/:id", async (req, res) => {
     _id: new ObjectId(id),
   });
 
+
   if (realEstate) {
-    return res.json(realEstate);
+    const agency = await db.collection("realEstateAgencies").findOne({
+      _id: new ObjectId(realEstate.agencyId),
+    });
+
+    const agent = await db.collection("users").findOne({
+      _id: new ObjectId(realEstate.appointedRealEstateAgentId),
+    });
+
+    if (agency && agent) {
+      // Add agency and agent information to the real estate object
+      realEstate.agency = agency;
+      realEstate.agent = agent;
+
+      return res.json(realEstate);
+    } else {
+      return res.status(404).json({ error: "Agency or agent not found" });
+    }
   } else {
     return res.status(404).json({ error: "Real estate not found" });
   }

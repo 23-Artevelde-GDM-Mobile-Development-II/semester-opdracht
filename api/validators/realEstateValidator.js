@@ -67,7 +67,8 @@ export const createRealEstate = Joi.object({
     energy: energySchema.required(),
     description: Joi.string().required(),
     published: Joi.boolean().required(),
-    appointedRealEstateAgentId: idSchemaRequired
+    appointedRealEstateAgentId: idSchemaRequired,
+    agencyId: idSchemaRequired
 });
 
 

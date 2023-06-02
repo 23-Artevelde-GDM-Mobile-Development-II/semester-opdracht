@@ -13,168 +13,163 @@ import SelectWithLabel from '../../components/Global/formInputs/select/selectWit
 import SearchSidebar from '../../components/searchPage/sidebar/searchSidebar';
 import { useSearchParams } from 'react-router-dom';
 import useMutation from '../../hooks/useMutation';
+import Loading from '../../components/Global/loading/loading';
+import { useAuthContext } from '../../contexts/AuthContainer';
 
 function SearchRealEstate(props) {
 
-
-    // function changeToggleFilterOptions(optionName) {
-    //     setToggleFilterOptions(()=>(
-    //         {
-    //             ...toggleFilterOptions,
-    //             [optionName]: !(toggleFilterOptions[optionName])
-    //         }
-    //     ));
-
-    // }
-
+    const  {user} = useAuthContext();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { isLoading, error, mutate } = useMutation();
 
     const [filter, setFilter] = useState({
         filterParams: {},
-        orderBy: 'recentst',
+        sortBy: 'mostRecent',
         sellingMethod: 'renting'
     });
-    
+
+    function updateSellingMethod(){
+        if(filter.sellingMethod === 'renting'){
+            setFilter(prevValues => ({...prevValues, sellingMethod: 'selling'}))
+        }else{
+            setFilter(prevValues => ({...prevValues, sellingMethod: 'renting'}))
+
+        }
+        
+    }
 
     const [realEstatesData, setRealEstateData] = useState([]);
+    const [filterErrors, setFilterErrors] = useState([]);
+    
+    // Get parameters from url and place them in the filterParams.
+    useEffect(() => {
+        const filterParams = {
+          city: searchParams.get("city") || undefined,
+          priceMin: parseInt(searchParams.get("priceMin")) || undefined,
+          priceMax: parseInt(searchParams.get("priceMax")) || undefined,
+          numberOfRoomsMin: parseInt(searchParams.get("numberOfRoomsMin")) || undefined,
+          numberOfBathroomsMin: parseInt(searchParams.get("numberOfBathroomsMin")) || undefined,
+          livingAreaMin: parseInt(searchParams.get("livingAreaMin")) || undefined,
+          livingAreaMax: parseInt(searchParams.get("livingAreaMax")) || undefined,
+          landAcreageMin: parseInt(searchParams.get("landAcreageMin")) || undefined,
+          landAcreageMax: parseInt(searchParams.get("landAcreageMax")) || undefined,
+          gardenAvailable: searchParams.get("gardenAvailable") || undefined,
+          terraceAvailable: searchParams.get("terraceAvailable") || undefined,
+          balconyAvailable: searchParams.get("balconyAvailable") || undefined,
+          parkingAvailable: searchParams.get("parkingAvailable") || undefined,
+          hasSolarPanels: searchParams.get("hasSolarPanels") || undefined,
+          epcMin: searchParams.get("epcMin") || undefined,
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    // searchParams.get("__firebase_request_key");
-    console.log(searchParams.get("appatement"));
+        };
+    
+        // Remove properties with empty string values
+        Object.keys(filterParams).forEach((key) => {
+          if (filterParams[key] === undefined) {
+            delete filterParams[key];
+          }
+        });
+    
+        setFilter((prevFilter) => ({
+          ...prevFilter,
+          filterParams
+        }));
+    
+    
+    }, [searchParams]);
 
-
+    function handleOrderByChange(e) {
+        setFilter((prevFilter) => ({
+            ...prevFilter,
+            sortBy: e.target.value
+        }));
+      
+    }
+    
 
     useEffect(()=>{
-        mutate(`${process.env.REACT_APP_API_URL}/realEstates/sellingMethod/${filter.sellingMethod}`, {
-        method: "GET",
+        mutate(`${process.env.REACT_APP_API_URL}/realEstates/sellingMethod/${filter.sellingMethod}?sortBy=${filter.sortBy}`, {
+        method: "POST",
         data: filter.filterParams,
         onSuccess: (data) => {
-            setRealEstateData(data);
-            console.log(data);
+            setRealEstateData(data.realEstates);
+            console.log(data.realEstates);
         },
         });
 
+        if(error && Array.isArray(error) ){
+            setFilterErrors(error);
+        }
+
     }, [filter, searchParams]);
 
-    console.log('realEstates', realEstatesData)
-    console.log(error);
+   
+        if (isLoading) {
+            return <Loading />;
+        }
+    
+        if (error) {
+            return (
+                <div className={styles.pageContainer}>
+                    {/* SIDEBAR WITH FILTERS */}
+                    <SearchSidebar sellingMethod={filter.sellingMethod} filterErrors={filterErrors} toggleSellingMethod={updateSellingMethod}/>
+    
+                    <main>
+                        <p>Er konden geen resultaten gevonden worden.</p>
+                    </main>
+                </div>
+            );
+        }
 
-
-    return (
-        <div className={styles.pageContainer}>
-
-            {/* SIDEBAR WITH FILTERS */}
-            <SearchSidebar sellingMethod={filter.sellingMethod}/>
-
-            {/* MAIN CONTENT */}
-            <main>
-                <h1>Dit is zoekpagina</h1>
-
-                <div className={styles.justifyBetween}>
-
-                    {/* FILTER ICON FOR MOBILE*/}
-                    {/* <button>
-                        <i className="fa-solid fa-filter md:hidden cursor-pointer bg-mint-green text-white p-5 m-8 rounded-full"></i>
-                    </button> */}
-
-                    <p>42 resultaten</p>
-
-                    {/* ORDER BY */}
-                    <div className="m-8 md:mt-[8.5em] w-max ml-auto">
-                        <select name="sort" id="sort" className={styles.sort} onChange={''}>
-                            <option value="id-DESC">Meest recente eerst</option>
-                            <option value="id-ASC">Oudste eerst</option>
-                            <option value="price-ASC">Goedkoopste eerst</option>
-                            <option value="price-DESC">Duurste eerst</option>
-                        </select>
+        return (
+            <div className={styles.pageContainer}>
+    
+                {/* SIDEBAR WITH FILTERS */}
+                <SearchSidebar sellingMethod={filter.sellingMethod} filterErrors={filterErrors} toggleSellingMethod={updateSellingMethod}/>
+    
+                {/* MAIN CONTENT */}
+                <main>
+                    <h1>Dit is zoekpagina</h1>
+    
+                    <div className={styles.justifyBetween}>
+    
+                        {/* FILTER ICON FOR MOBILE*/}
+                        {/* <button>
+                            <i className="fa-solid fa-filter md:hidden cursor-pointer bg-mint-green text-white p-5 m-8 rounded-full"></i>
+                        </button> */}
+    
+                        <p>{realEstatesData.length} {realEstatesData.length> 1 || realEstatesData.length === 0 ? 'resultaten': 'resultaat'}</p>
+    
+                        {/* SORT BY */}
+                        <div>
+                            <Select options={[{label: 'Meest recente eerst', value: 'mostRecent'}, {label: 'Oudste eerst', value: 'oldest'}, {label: 'Goedkoopste eerst', value: 'cheapest'}, {label: 'Duurste eerst', value: 'mostExpensive'}]} selectName={'orderBy'} activeOption={filter.sortBy} handleChange={handleOrderByChange}/>
+                        </div>
                     </div>
-                </div>
-                
-                {/* CARDS */}
-                <div className="px-8">
+
+                    
+                    {/* CARDS */}
+                    <div className="px-8">
+                    {realEstatesData.length > 0 ? 
                     <GridCards>
-                        {/* <RealEstateCard/> */}
-                    <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellingMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "a"
-                            }}
-
+                    {realEstatesData.map((realEstateData) => (
+                        <RealEstateCard
+                            key={realEstateData._id}
+                            realEstateData={realEstateData}
                             isLiked={false}
-                            isLoggedIn={true}
+                            isLoggedIn={user ? true : false}
                             userStatus={'regular user'}
-                            
                         />
-
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellingMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "a"
-                            }}
-
-                            isLiked={false}
-                            isLoggedIn={true}
-                            userStatus={'regular user'}
-                            
-                        />
-
-
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellingMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "a"
-                            }}
-
-                            isLiked={false}
-                            isLoggedIn={true}
-                            userStatus={'regular user'}
-                            
-                        />
+                        ))}
+                
                     </GridCards>
-                </div>
-            
-            </main>
-        </div>
-    );
-}
+                    : 
+                    <p>Er zijn geen resultate gevonden.</p>
+                    }
+                    </div>
+                
+                </main>
+            </div>
+        );
+    }
+
 
 export default SearchRealEstate;

@@ -18,3 +18,20 @@ p, label, span, div, i{
 body{
   background-color: #F8F8F8;
 }
+
+.imageUploader {
+  --cfg-pubkey: "2773840e0b025e56fd6a";
+  --cfg-img-only: 1;
+  --cfg-multiple: 1;
+  --cfg-max-local-file-size-bytes: 524288000;
+  --darkmode: 0;
+  --h-accent: 231;
+  --s-accent: 99%;
+  --l-accent: 66%;
+}
+
+.line{
+  color: rgba(54, 52, 58, 0.717);
+  display: block;
+  margin: 2em 0;
+}

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './dashboardAccountSidebar.module.css';
+import { useAuthContext } from '../../../../contexts/AuthContainer';
 
 
 function DashboardAccountSidebar({navItems, activeItem}) {
     const [showSidebar, setShowSidebar] = useState(false);
-
+    const {logout} = useAuthContext();
     return (
 
         <div className={styles.sidebar}>
@@ -19,6 +20,8 @@ function DashboardAccountSidebar({navItems, activeItem}) {
                         )
                     })
                 }
+
+                <li className={styles.navItem} onClick={logout}>Uitloggen</li>
             </ul>
 
             <button onClick={() => setShowSidebar(!showSidebar)} className={`md:hidden bg-primair-blue py-2 px-4 h-fit z-10 -rotate-90 ${showSidebar? 'left-[75.2%]':  'left-[-6%]'} top-[50%] rounded-b-lg text-white fixed hover:bg-blue-700 duration-150`}>Sidebar</button>

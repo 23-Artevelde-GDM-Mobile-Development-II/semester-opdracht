@@ -41,9 +41,10 @@
 }
 
 .errorMessage{
+    display: block;
     color: #dd4a4a;
     margin-bottom: 2em;
-    margin-top: -1em;
+    /* margin-top: -1em; */
     /* text-red-500 mb-4 mt-[-1em] */
 }
 

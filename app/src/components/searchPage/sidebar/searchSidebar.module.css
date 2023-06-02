@@ -1,0 +1,15 @@
+.switch{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0 ;
+    cursor: pointer;
+}
+
+.switch .active{
+    background-color: #536DFE;
+    padding: 1rem 2rem;
+    color: white;
+    font-weight: 700;
+    border-radius: 1rem;
+}

@@ -26,6 +26,7 @@
 .navItem:hover, .activeNavItem{
     border-left: 4px solid #536DFE;
     color: #536DFE;
+    cursor: pointer;
 }
 
 .activeNavItem{

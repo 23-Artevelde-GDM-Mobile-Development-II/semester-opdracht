@@ -18,7 +18,7 @@ postAgenciesRouter.post("/", adminMiddleware, async (req, res) => {
         const errorArray = error.details.map((err) => err.message);
         return res.status(400).json({ errors: errorArray });
     }
-    const { name, phoneNr, email, image} = value;
+    const { name, phoneNr, email, image, street, number, city, zipCode} = value;
     
     // check if agency exists in the database
     let agency = await db.collection("realEstateAgencies").findOne({ name });
@@ -26,10 +26,15 @@ postAgenciesRouter.post("/", adminMiddleware, async (req, res) => {
     // Add agency
     if (!agency) {
       await db.collection("realEstateAgencies").insertOne({ 
-        name: name,
-        phoneNr: phoneNr,
-        email: email,
-        image: image
+        name,
+        phoneNr,
+        email,
+        image,
+        street,
+        number,
+        city,
+        zipCode,
+        description
       });
 
       agency = await db.collection("realEstateAgencies").findOne({ name });

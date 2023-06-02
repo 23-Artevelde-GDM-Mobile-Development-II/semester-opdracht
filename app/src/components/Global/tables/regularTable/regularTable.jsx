@@ -4,7 +4,7 @@ import styles from "./regularTable.module.css";
 
 import EditRemoveBtn from "../../btns/editRemoveBtn/editRemoveBtn";
 
-function RegularTable({columnNames, data, removeOnly, onEdit, onDelete, usersTable, handleClickSearch}) {
+function RegularTable({columnNames, data, removeOnly, onEdit, deleteAction, usersTable, handleClickSearch}) {
 
     return (
         <div className={styles.tableContainer}>
@@ -28,12 +28,14 @@ function RegularTable({columnNames, data, removeOnly, onEdit, onDelete, usersTab
                 
                 <tbody>
                 {
-                    data.map((row, i) => (
-                            <tr key={`row-${i}-${row[0]}-${row[1]}`}>
-                               {row.map((info, i) =>(
+                    data.map((row, i) => {
+                        const [id, ...rowValue] = row;
+                        console.log(rowValue);
+                            return (<tr key={`row-${i}-${rowValue[0]}-${rowValue[1]}`}>
+                               {rowValue.map((info, i) =>(
                                 // Check if it's an url of an image or not
-                                <td key={`row-${i}-${row[0]}-${row[1]}-cel-${i}`}>
-                                    {info.toString().includes('https://ucarecdn.com/') ? <img src={info} alt="immokantoor" /> 
+                                <td key={`row-${i}-${rowValue[0]}-${rowValue[1]}-cel-${i}`}>
+                                    {info && info.toString().includes('https://ucarecdn.com/') ? <img src={info} alt="immokantoor" /> 
                                     : info}
                                 </td>
                                 ))} 
@@ -64,9 +66,9 @@ function RegularTable({columnNames, data, removeOnly, onEdit, onDelete, usersTab
 
                                }
 
-                               <td><EditRemoveBtn removeOnly={removeOnly} className={"mx-auto"} handleClickDelete={()=>  onDelete(row[0])} handleClickEdit={() => onEdit(row[0])}/></td>
-                            </tr>
-                        ))
+                               <td><EditRemoveBtn removeOnly={removeOnly} className={"mx-auto"} handleDeleteAction={deleteAction} handleClickEdit={() => onEdit(row[0])} id={id}/></td>
+                            </tr>)
+                    })
                 }
                 </tbody>
                 

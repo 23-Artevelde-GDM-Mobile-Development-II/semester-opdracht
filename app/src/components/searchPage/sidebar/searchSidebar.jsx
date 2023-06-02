@@ -8,26 +8,29 @@ import SelectWithLabel from '../../Global/formInputs/select/selectWithLabel/sele
 import Loading from '../../Global/loading/loading';
 
 import styles from './searchSidebar.module.css';
+import { useSearchParams } from 'react-router-dom';
 
-function SearchSidebar({sellingMethod}) {
+function SearchSidebar({filterErrors, toggleSellingMethod, sellingMethod}) {
+    const [isRenting, setIsRenting] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [filterParameters, setFilterParameters] = useState({
         types: [],
-        city: '',
-        priceMin: '',
-        priceMax: '', 
-        livingAreaMin: '',
-        livingAreaMax: '', 
-        landAcreageMin: '', 
-        landAcreageMax: '', 
-        numberOfRoomsMin: 1, 
-        numberOfBathroomsMin: 1, 
-        gardenAvailable: true, 
-        terraceAvailable: true, 
-        balconyAvailable: true, 
-        parkingAvailable: true, 
-        hasSolarPanels: true, 
-        epcMin: 'a'
+        city: searchParams.get("city") || '',
+        priceMin: searchParams.get("priceMin") || '',
+        priceMax: searchParams.get("priceMax") || '', 
+        livingAreaMin: searchParams.get("livingAreaMin") || '',
+        livingAreaMax: searchParams.get("livingAreaMax") || '', 
+        landAcreageMin: searchParams.get("landAcreageMin") || '', 
+        landAcreageMax: searchParams.get("landAcreageMax") || '', 
+        numberOfRoomsMin: searchParams.get("numberOfRoomsMin") || 1, 
+        numberOfBathroomsMin: searchParams.get("numberOfBathroomsMin") || 1, 
+        gardenAvailable: searchParams.get("gardenAvailable") || '', 
+        terraceAvailable: searchParams.get("terraceAvailable") || '', 
+        balconyAvailable: searchParams.get("balconyAvailable") || '', 
+        parkingAvailable: searchParams.get("parkingAvailable") || '', 
+        hasSolarPanels: searchParams.get("hasSolarPanels") || false, 
+        epcMin: searchParams.get("gardenAvailable") || ''
     });
     
     // Fetch main types
@@ -72,8 +75,8 @@ function SearchSidebar({sellingMethod}) {
                 ));
             console.log(combinedArray)
         }
-        console.log('bonjour')
     }, [subTypeData, typeData]);
+
 
     function updateFilterParameters(e){
         const {name, value, type, checked} = e.target;
@@ -85,6 +88,8 @@ function SearchSidebar({sellingMethod}) {
         ))
     }
 
+
+
     if(typeIsLoading & subTypeIsLoading){
         return <Loading/>
     }else{
@@ -95,10 +100,16 @@ function SearchSidebar({sellingMethod}) {
                 <h2>Zoekcriteria</h2>
     
                 <div className={styles.switch}>
-                    <p className={styles.active}>Te koop</p>
-                    <p>Te huur</p>
+                    <p className={sellingMethod === 'selling' && styles.active} onClick={toggleSellingMethod}>Te koop</p>
+                    <p className={sellingMethod === 'renting' && styles.active} onClick={toggleSellingMethod}>Te huur</p>
                 </div>
-    
+
+                {
+                    filterErrors &&
+                    filterErrors.map((filterError, i)=> (
+                        <p key={`filter-error-${i}`}>{filterError}</p>
+                    ))
+                }
                 <form>
                     <FilterSidebar filterNameDutch={'Type pand'}>
     
@@ -117,6 +128,7 @@ function SearchSidebar({sellingMethod}) {
                                     labelName={typeObject.typeName}
                                     inputName={typeObject.typeName}
                                     inputDataId={typeObject.typeId}
+                                    key={typeObject.typeId}
                                     >
                                         {
                                             typeObject.subTypes.map((subTypeObject)=> (
@@ -173,22 +185,22 @@ function SearchSidebar({sellingMethod}) {
     
                     <FilterSidebar filterNameDutch={'Buiten'}>
                         
-                        <SelectWithLabel options={[{label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"parkingAvailable"} labelText={"Parking aanwezig"} activeOption={filterParameters.parkingAvailable} handleChange={updateFilterParameters}/>
+                        <SelectWithLabel options={[{label: 'Maakt niet uit', value: ''}, {label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"parkingAvailable"} labelText={"Parking aanwezig"} activeOption={filterParameters.parkingAvailable} handleChange={updateFilterParameters}/>
     
-                        <SelectWithLabel options={[{label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"gardenAvailable"} labelText={"Tuin aanwezig"} activeOption={filterParameters.gardenAvailable} handleChange={updateFilterParameters}/>
+                        <SelectWithLabel options={[{label: 'Maakt niet uit', value: ''},{label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"gardenAvailable"} labelText={"Tuin aanwezig"} activeOption={filterParameters.gardenAvailable} handleChange={updateFilterParameters}/>
     
-                        <SelectWithLabel options={[{label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"terraceAvailable"} labelText={"Terras aanwezig"} activeOption={filterParameters.terraceAvailable} handleChange={updateFilterParameters}/>
+                        <SelectWithLabel options={[{label: 'Maakt niet uit', value: ''},{label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"terraceAvailable"} labelText={"Terras aanwezig"} activeOption={filterParameters.terraceAvailable} handleChange={updateFilterParameters}/>
     
-                        <SelectWithLabel options={[{label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"balconyAvailable"} labelText={"Balkon aanwezig"} activeOption={filterParameters.balconyAvailable} handleChange={updateFilterParameters}/>
+                        <SelectWithLabel options={[{label: 'Maakt niet uit', value: ''}, {label: 'Ja', value: true}, {label: "Nee", value: false}]} name={"balconyAvailable"} labelText={"Balkon aanwezig"} activeOption={filterParameters.balconyAvailable} handleChange={updateFilterParameters}/>
         
                     </FilterSidebar>
     
     
                     <FilterSidebar filterNameDutch={'Energie'}>
                         
-                        <SelectWithLabel options={[{label: 'A', value: 'a'}, {label: "B", value: 'b'}, {label: "C", value: 'c'}, {label: 'D', value: 'd'}, {label: 'E', value: 'e'}, {label: 'F', value: 'f'}]} name={"epcMin"} labelText={"EPC-waarde"} activeOption={filterParameters.epcMin} handleChange={updateFilterParameters}/>
+                        <SelectWithLabel options={[{label: 'Maakt niet uit', value: ''}, {label: 'A', value: 'a'}, {label: "B", value: 'b'}, {label: "C", value: 'c'}, {label: 'D', value: 'd'}, {label: 'E', value: 'e'}, {label: 'F', value: 'f'}]} name={"epcMin"} labelText={"EPC-waarde"} activeOption={filterParameters.epcMin} handleChange={updateFilterParameters}/>
     
-                        <input type="checkbox" name={"hasSolarPanels"} id={"hasSolarPanels"} value={filterParameters.hasSolarPanels} onChange={updateFilterParameters}/>
+                        <input type="checkbox" name={"hasSolarPanels"} id={"hasSolarPanels"} checked={filterParameters.hasSolarPanels} onChange={updateFilterParameters}/>
                         <label htmlFor={"hasSolarPanels"}>Heeft zonnepanelen</label>
                     
                     </FilterSidebar>

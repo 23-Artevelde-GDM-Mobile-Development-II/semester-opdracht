@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './updateRealEstates.module.css';
 import DashboardAccountSidebar from '../../../../components/Global/sidabars/dashboardAccountSidebar/dashboardAccountSidebar';
 import SIDEBAR_NAV_ITEMS from '../../../../consts/sidebarNavItems';
@@ -6,8 +6,39 @@ import GridCards from '../../../../components/Global/grid/gridCards/gridCards';
 import RealEstateCard from '../../../../components/Global/cards/realEstateCard/realEstateCard';
 import PrimaryBtnLink from '../../../../components/Global/btns/primaryBtnLink/primaryBtnLink';
 import ROUTES from '../../../../consts/routes';
+import { useAuthContext } from '../../../../contexts/AuthContainer';
+import useFetch from '../../../../hooks/useFetch';
+import Loading from '../../../../components/Global/loading/loading';
+import { useRealEstateAgentContext } from '../../../../contexts/RealEstateAgent';
 
-function UpdateRealEstates({userStatus}) {
+function UpdateRealEstates(props) {
+
+    const userStatus = "realEstate";
+
+    const {user} = useAuthContext();
+    const {realEstateData} = useRealEstateAgentContext();
+    
+    const [realEstatesData, setRealEstateData] = useState(realEstateData);
+
+    const {
+        isLoading,
+        error,
+        invalidate,
+        data
+    } = useFetch(`/realEstates/${userStatus === 'realEstateAgent' ? 'own' : ''}`);
+
+    useEffect(() => {
+        if(data){
+            setRealEstateData(data);
+        }
+    }, [data]);
+
+
+    if(isLoading){
+        return <Loading/>
+    }
+
+
     return (
         <div className={styles.container}>
             <div className={styles.sidebar}>
@@ -19,89 +50,36 @@ function UpdateRealEstates({userStatus}) {
             </div>
 
             <main className={styles.realEstateContainer}>
-                <div className={styles.justifyBetween}>
-                    <h1>Panden</h1>
-                    <PrimaryBtnLink location={ROUTES.dashboard.agency.realEstate.post} text={'Nieuw'}/>
-                </div>
+
+                {
+                    error ? 
+                    <div>{error}</div>
+                    : 
+
+                    <>
+                        <div className={styles.justifyBetween}>
+                            <h1>Panden</h1>
+                            <PrimaryBtnLink location={ROUTES.dashboard.agency.realEstate.post} text={'Nieuw'}/>
+                        </div>
+                        
+                        <div>
+
+                            <GridCards>
+                                {realEstatesData.map((realEstateData) => (
+                                    <RealEstateCard
+                                        key={realEstateData._id}
+                                        realEstateData={realEstateData}
+                                        isLiked={false}
+                                        isLoggedIn={user ? true : false}
+                                        userStatus={userStatus}
+                                    />
+                                    ))}
+
+                                </GridCards>
+                        </div>
+                    </>
+                }
                 
-
-                <div>
-                    <GridCards>
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellingMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: true,
-                                propertyId: 5,
-                                epcLabel: "b",
-                                isPublished: true
-                            }}
-
-                            isLoggedIn={true}
-                            published={true}
-                            userStatus={'agent'}
-                        />
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellinigMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "e"
-                            }}
-
-                            isLoggedIn={true}
-                            isPublished={true}
-                            userStatus={'agent'}
-
-                            
-                        />
-                        <RealEstateCard 
-                            realEstateData={{
-                                price: "650",
-                                type: "Huis",
-                                sellinigMethode: "te huur",
-                                street: "Bauterstraat",
-                                houseNr: 29,
-                                zipCode: 9870,
-                                city: "Zulte",
-                                measurements: 244,
-                                bedrooms: 2,
-                                constructionYear: 2013,
-                                bathrooms: 1,
-                                imgUrl: "https://images.unsplash.com/photo-1572953745960-14685e3e9b49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-                                unavailable: false,
-                                propertyId: 5,
-                                epcLabel: "a"
-                            }}
-
-                            isLoggedIn={true}
-                            isPublished={false}
-                            userStatus={'agent'}
-                            
-                        />
-                    </GridCards>
-                </div>
             </main>
         </div>
     );

@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import SecondaryBtnLink from "../../Global/btns/secondaryBtnLink/secondaryBtnLink";
 import styles from './contactCard.module.css';
-import { useState } from "react";
 import SendMessage from "../../Global/popups/sendMessage/sendMessage";
 import estateAgentIcon from "./estate-agent.png";
 
-function ContactCard({isLoggedIn, estateAgencyData, contactPersonData}) {
-
+function ContactCard({isLoggedIn, realEstateAgencyData, contactPersonData, realEstateId}) {
 
     function openPopup() {
         document.querySelector('dialog').showModal();
@@ -16,19 +14,19 @@ function ContactCard({isLoggedIn, estateAgencyData, contactPersonData}) {
     return(
         <>
             {/* This is a popup to write a message to the contactperson of this real estate. */}
-            <SendMessage/>
+            <SendMessage receiverId={contactPersonData.contactPersonId} realEstateId={realEstateId}/>
             
 
             <div className={styles.contactCard}>
                 <div className={styles.justifyBetween}>
                     <div className={styles.agnecyImgContainer}>
-                        <img className="block mx-auto rounded-lg mb-8 max-h-[100px]" src={estateAgencyData.img} alt="Immokantoor" />
+                        <img className="block mx-auto rounded-lg mb-8 max-h-[100px]" src={realEstateAgencyData.img} alt="Immokantoor" />
                     </div>
 
                     <div className={styles.cardEstateAgencyInfo}>
-                        <h3>{estateAgencyData.name}</h3>
-                        <p>{estateAgencyData.street} {estateAgencyData.number}</p>
-                        <p>{estateAgencyData.zipCode} {estateAgencyData.city}</p>
+                        <h3>{realEstateAgencyData.name}</h3>
+                        <p>{realEstateAgencyData.street} {realEstateAgencyData.number}</p>
+                        <p>{realEstateAgencyData.zipCode} {realEstateAgencyData.city}</p>
 
                         <a className={styles.secondaryBtn} href="#estateAgencyInfo">Lees meer</a>
                     </div>

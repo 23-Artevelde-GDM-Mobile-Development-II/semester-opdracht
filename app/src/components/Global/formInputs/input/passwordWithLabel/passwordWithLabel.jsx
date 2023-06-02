@@ -5,7 +5,8 @@ import styles from './passwordWithLabel.module.css';
 function PasswordWithLabel({name, value, labelText, handleChange}) {
     const [passwordShown , setPasswordShown ] = useState(false);
 
-    function toggleVisibility() {
+    function toggleVisibility(e) {
+        e.preventDefault();
         setPasswordShown(prevState => !prevState);
     }
     

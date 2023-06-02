@@ -48,7 +48,7 @@ deleteRealEstatesRouter.delete("/types/:id", adminMiddleware,async (req, res) =>
     const typeId = req.params.id;
 
     // Validation of the id
-    const { error } = idSchema.validate(id);
+    const { error } = idSchema.validate(typeId);
 
     if (error) {
         const errorArray = error.details.map((err) => err.message);

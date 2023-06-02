@@ -2,6 +2,7 @@ import express from "express";
 import { ObjectId } from "mongodb";
 import { db } from "../../db/mongo.js";
 import { adminMiddleware } from "../../middleware/adminMiddleware.js";
+import { idSchema } from "../../validators/idValidator.js";
 
 const deleteUsersRouter = express.Router();
 

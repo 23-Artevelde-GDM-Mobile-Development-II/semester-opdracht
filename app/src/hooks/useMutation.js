@@ -41,6 +41,7 @@ const useMutation = () => {
       // If there's a success callback, call it with the response data, otherwise set loading state to false
       if (options.onSuccess) {
         options.onSuccess(data);
+        setIsLoading(false);
       } else {
         setIsLoading(false);
       }
@@ -69,13 +70,14 @@ const useMutation = () => {
     let errorData;
       try {
         const tempData = await error.json();
-        errorData = [tempData.error];
+        errorData = tempData.errors ? tempData.errors : [tempData.error];
       } catch (ex) {
         errorData = [error.statusText];
       }
       // If there's an error callback, call it with the error, otherwise set the error state and loading state to false
       if (options.onError) {
         options.onError(error);
+        setIsLoading(false);
       } else {
         setIsLoading(false);
         setError(errorData);

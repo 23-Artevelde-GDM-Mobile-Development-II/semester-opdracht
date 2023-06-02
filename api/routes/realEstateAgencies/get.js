@@ -14,6 +14,30 @@ getAgenciesRouter.get("/", async (req, res) => {
   res.json(realEstateAgencies);
 });
 
+
+getAgenciesRouter.get("/own", realEstateAgentMiddleware, async (req, res) => {
+
+  const id = req.user._id;
+
+  const agency = await db.collection("employees").findOne({
+    userId: id,
+  });
+
+  if (agency) {
+    const agencyData = await db.collection("realEstateAgencies").findOne({
+      _id: agency.realEstateAgencyId,
+    });
+
+    if(agencyData){
+      return res.json(agencyData);
+    }else{
+      return res.status(404).json({ error: "This real estate agency does not exist." });
+    }
+  } else {
+    return res.status(404).json({ error: "You are not assigned to a real estate agency." });
+  }
+});
+
 // Get agency by id
 getAgenciesRouter.get("/:id", async (req, res) => {
   const id = req.params.id;

@@ -56,6 +56,18 @@
     font-weight: 600;
 }
 
+.errorMessage{
+    display: block;
+    color: #dd4a4a;
+    margin-bottom: 2em;
+}
+
+.successMessage{
+    display: block;
+    color: #4add98;
+    margin-bottom: 2em;
+}
+
 
 @media only screen and (min-width: 600px) {
     .container{

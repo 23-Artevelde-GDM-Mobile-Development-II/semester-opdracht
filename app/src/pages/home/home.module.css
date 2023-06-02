@@ -1,0 +1,22 @@
+.coverImage{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.coverImage .position{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coverImage .primaryLink{
+    display: block;
+    
+    
+    z-index: 40;
+}

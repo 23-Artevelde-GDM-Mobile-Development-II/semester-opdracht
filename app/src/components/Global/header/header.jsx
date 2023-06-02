@@ -4,9 +4,12 @@ import ROUTES from '../../../consts/routes';
 import styles from './header.module.css';
 import PrimaryBtnLink from '../btns/primaryBtnLink/primaryBtnLink';
 import SecondaryBtnLink from '../btns/secondaryBtnLink/secondaryBtnLink';
+import { useAuthContext } from '../../../contexts/AuthContainer';
 
 const Header = () => {
-    const isLoggedIn = false;
+    
+    const {user} = useAuthContext();
+
     return (
         <header className={styles.header}> 
             {/* <header className={`md:flex md:justify-between py-8 px-12 shadow-md fixed w-full top-0 bg-white ${className}`}> */}
@@ -16,9 +19,6 @@ const Header = () => {
                     <h2>Home sweet home</h2>
                 </Link>
                 
-                {/* <button>
-                    <i className="fa-solid fa-bars md:hidden cursor-pointer"></i>
-                </button> */}
             </div>
             
             {/* NAVLINKS */}
@@ -27,23 +27,27 @@ const Header = () => {
                     <li className='my-8 md:m-0'>
                         <Link className="hover:text-primair-blue" to={'/zoeken'}>Zoeken</Link>
                     </li>
-                    <li className='my-8 md:m-0'>
-                        <Link className="hover:text-primair-blue" to={'/makelaars'}>Vind je makelaar</Link>
-                    </li>
+
                     
 
                     {/* Check if user is logged in */}
-                    {isLoggedIn ? (
-                        <Link to="/account/persoonlijke-gegevens"><i className="fa-solid fa-user text-xl hover:text-primair-blue"></i></Link>
-                    ) : (
-                        // <span className='btns md:flex md:justify-between gap-x-4'>
+                    {user ? (
                         <>
-                            <li className='mb-8 md:m-0'>
+                            <Link to={ROUTES.dashboard.admin.users}>Admin dashboard</Link>
+                            <Link to={ROUTES.dashboard.agency.agencyData}>Makelaar dashboard</Link>
+                            <Link to={ROUTES.account.personalData}><i className="fa-solid fa-user text-xl hover:text-primair-blue"></i></Link>
+                        </>
+                        
+
+
+                    ) : (
+                        <>
+                            <li>
                                 <PrimaryBtnLink location={'/registreer'} text={'Registreren'}/>
                             </li>
-                            <li className='mb-8 md:m-0'><SecondaryBtnLink location={'/inloggen'} text={'Inloggen'}/></li>
+                            <li><SecondaryBtnLink location={'/inloggen'} text={'Inloggen'}/></li>
                         </>
-                        // </span>
+                    
                     )}
 
                 </ul>

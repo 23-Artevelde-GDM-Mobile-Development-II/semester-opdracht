@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import LogIn from "../pages/authorization/logIn";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 
 // Define the key used to store the user in local storage
@@ -23,6 +24,7 @@ const AuthContainer = ({ children }) => {
   // Initialize user state using the getUserFromStorage function
   const [user, setUser] = useState(getUserFromStorage());
   const [globalError, setGlobalError] = useState();
+  const navigate = useNavigate();
 
   // useEffect hook to store user object in local storage when it changes
   useEffect(() => {
@@ -36,6 +38,8 @@ const AuthContainer = ({ children }) => {
   // Function to set user state to null when user logs out
   const handleLogout = () => {
     setUser(null);
+    navigate("/");
+
   };
 
   // Function to set user state to a user object when user logs in
@@ -44,7 +48,7 @@ const AuthContainer = ({ children }) => {
     // .then(res => res.json())
     // .then(data => );
     setUser(user);
-    setGlobalError(null)
+    setGlobalError(null);
   };
 
   // If user exists, wrap child components with the AuthContext Provider and pass user and logout function as props
@@ -58,6 +62,7 @@ const AuthContainer = ({ children }) => {
 
   // If user does not exist, return LoginScreen component and pass handleLogin function as a prop
   return <LogIn onLogin={handleLogin} initialError={globalError} />;
+
 };
 
 // Custom hook to access AuthContext in child components

@@ -48,7 +48,7 @@ const useFetch = (path) => {
 
     // Return a cleanup function that sets isCurrent to false when the component is unmounted
     return () => (isCurrent = false);
-  }, [path, logout, setGlobalError, user._id]);
+  }, [path, logout, user._id]);
  
   // Call the fetchData function when the component mounts or when path or userId change
   useEffect(() => {

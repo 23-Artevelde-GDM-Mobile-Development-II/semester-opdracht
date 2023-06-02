@@ -4,28 +4,49 @@ import PasswordWithLabel from "../../components/Global/formInputs/input/password
 import { Link } from "react-router-dom";
 import ROUTES from "../../consts/routes";
 import styles from "./authorization.module.css";
+import useMutation from "../../hooks/useMutation";
+import { useAuthContext } from "../../contexts/AuthContainer";
 
 function Register() {
-    const [registerFirstName, setRegisterFirstName] = useState("");
-    const [registerLastName, setRegisterLastName] = useState("");
-    const [registerEmail, setRegisterEmail] = useState("");
-    const [registerPassword, setRegisterPassword] = useState("");
-    const [registerPhoneNr, setRegisterPhoneNr] = useState("");
-    // const [userNotFound, setUserNotFound] = useState(false);
+
+    const { isLoading, error, mutate } = useMutation();
     const [validationError, setValidationError] = useState(null);
 
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         email: "",
         phoneNr: "",
         password: ""
     });
 
-    function updateFormData(params) {
-        
+    const {login} = useAuthContext();
+
+    console.log(error);
+
+    function updateFormData(event) {
+        const {name, value} = event.target
+        setFormData(prevFormData => {
+            return {
+                ...prevFormData,
+                [name]: value
+            }
+        })
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData)
+        mutate(`${process.env.REACT_APP_API_URL}/users/add`, {
+        method: "POST",
+        data: formData,
+        onSuccess: (data) => {
+            console.log(data);
+            login(data);
+        },
+        });
+    };
+    
 
 
 
@@ -36,17 +57,25 @@ function Register() {
                 <div className={`${styles.cardContent} ${styles.scrollContainer}`}>
         
 
-                    <div>
+                    <form onSubmit={handleSubmit}>
                         <h2 className={styles.title}>Registreer</h2>
                         
                         {
-                            validationError !== null && <p className={styles.errorMessage}>{validationError}</p>
+                            error !== null && error !== undefined && error.length>1 ?
+                            error.map((err, i) => (
+                                <div>
+                                    <p key={i} className={styles.errorMessage}>{err}</p>
+                                </div>
+                            ))
+                            :
+                            <p className={styles.errorMessage}>{error}</p>
+
                             
                         }
 
                         <div className={styles.inputsFlex}>
-                            <InputWithLabel name={"firstName"} labelText={"Voornaam"} inputType={"text"} value={formData.firstName} handleChange={updateFormData}/>
-                            <InputWithLabel name={"lastName"} labelText={"Achternaam"} inputType={"text"} value={formData.lastName} handleChange={updateFormData}/>
+                            <InputWithLabel name={"firstname"} labelText={"Voornaam"} inputType={"text"} value={formData.firstname} handleChange={updateFormData}/>
+                            <InputWithLabel name={"lastname"} labelText={"Achternaam"} inputType={"text"} value={formData.lastname} handleChange={updateFormData}/>
                         
                         </div>
                         
@@ -57,13 +86,13 @@ function Register() {
                         <PasswordWithLabel name={"password"} labelText={"Wachtwoord"} value={formData.password} handleChange={updateFormData}/>
                         
 
-                        <button className={styles.submitBtn}>Registreer</button>
+                        <button className={styles.submitBtn} disabled={isLoading}>Registreer</button>
 
                         <div className={styles.toOtherPage}>
                             <span>Heb je al een account?</span><Link to={ROUTES.login}>Log je hier in</Link>
                         </div>
                             
-                    </div>
+                    </form>
 
                     {/* image */}
                     {/* <div className=""> */}

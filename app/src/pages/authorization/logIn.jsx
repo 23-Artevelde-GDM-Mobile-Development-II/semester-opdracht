@@ -21,8 +21,6 @@ function LogIn({onLogin, initialError }) {
 
     const { isLoading, error, mutate } = useMutation();
 
-    console.log(error);
-
     function updateFormData(event) {
         const {name, value} = event.target
         setFormData(prevFormData => {
@@ -35,12 +33,10 @@ function LogIn({onLogin, initialError }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData)
         mutate(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         data: formData,
         onSuccess: (data) => {
-            console.log(data);
             onLogin(data);
         },
         });
@@ -66,12 +62,6 @@ function LogIn({onLogin, initialError }) {
 
                 <form className={styles.cardContent} onSubmit={handleSubmit}>
                     <h2 className={styles.title}>Log in</h2>
-
-                    {/* {(() => {
-                        if (userNotFound === true) {
-                            return <p className="text-red-500 mb-4 mt-[-1em]">There is no user with this email address or password!</p>
-                        }
-                    })()} */}
 
                     {
                         error && 

@@ -7,6 +7,7 @@ import SIDEBAR_NAV_ITEMS from '../../../consts/sidebarNavItems';
 import ROUTES from '../../../consts/routes';
 import { useAuthContext } from '../../../contexts/AuthContainer';
 import useMutation from '../../../hooks/useMutation';
+import { useRealEstateAgentContext } from '../../../contexts/RealEstateAgent';
 
 // import { useAuthContext } from '../../../contexts/AuthContainer';
 // import { useAuthContext } from '../../../contexts/AuthContainer.js';
@@ -16,8 +17,13 @@ function PersonalData({routePath}) {
 
     const isUpdatePersonalDataPage = (routePath === ROUTES.account.personalData);
     const [formValues, setFormvalues] = useState({});
+    const [isSuccess, setIsSuccess] = useState(false);
+    
+    const realEstateAgency = useRealEstateAgentContext();
+
 
     const  {user, login} = useAuthContext();
+
     const { isLoading, error, mutate } = useMutation();
 
     useEffect(()=>{
@@ -32,16 +38,25 @@ function PersonalData({routePath}) {
         }else{
             // Real estate agency data fields
             setFormvalues({
-                name: '',
-                image: '',
-                email: '',
-                phoneNr: undefined
+                name: realEstateAgency.realEstateAgencyData.name,
+                image: realEstateAgency.realEstateAgencyData.image,
+                email: realEstateAgency.realEstateAgencyData.email,
+                phoneNr: realEstateAgency.realEstateAgencyData.phoneNr,
+                city: realEstateAgency.realEstateAgencyData.city,
+                street: realEstateAgency.realEstateAgencyData.street,
+                number: realEstateAgency.realEstateAgencyData.number,
+                zipCode: realEstateAgency.realEstateAgencyData.zipCode
         
             })
         }
-    }, [isUpdatePersonalDataPage, user]);
+    }, [isUpdatePersonalDataPage, user, realEstateAgency]);
 
-    
+    useEffect(()=>{
+        if(error){
+            setIsSuccess(false);
+        }
+        
+    }, [error]);
 
     function updateFormValues(e) {
         const {name, value} = e.target;
@@ -55,21 +70,25 @@ function PersonalData({routePath}) {
     }
 
 
-    const submitUserDataModifications = (e) => {
+    const submitDataModifications = (e) => {
         e.preventDefault();
-        mutate(`${process.env.REACT_APP_API_URL}/loggedInUser`, {
+        mutate(`${process.env.REACT_APP_API_URL}/${isUpdatePersonalDataPage? 'loggedInUser' : 'realEstateAgencies/own'}`, {
         method: "PATCH",
         data: formValues,
         onSuccess: (data) => {
             console.log(data);
-            login(data);
+            if(isUpdatePersonalDataPage){
+                login(data);
+            }
+
+            setIsSuccess(true);
         },
         });
     };
 
-    const submitAgencyDataModifications = (e) => {
+    // const submitAgencyDataModifications = (e) => {
         
-    };
+    // };
 
     return (
         <div className={styles.container}>
@@ -84,40 +103,61 @@ function PersonalData({routePath}) {
             <main className={styles.personalDataContainer}>
                 <h1>{isUpdatePersonalDataPage? 'Persoonlijke gegevens': 'Gegevens immokantoor'}</h1>
 
-                {isUpdatePersonalDataPage? 
-                <form onSubmit={submitUserDataModifications}>
-                    <div className={styles.name}>
-                        <InputWithLabel inputType={'text'} name={'firstname'} value={formValues.firstname} labelText={'Voornaam'} handleChange={updateFormValues}/>
+                
+                <form onSubmit={submitDataModifications}>
+                    {
+                        !isSuccess && error && 
+                        error.map((err, i)=> (
+                            <p key={i} className={styles.errorMessage}>{err}</p>
+                        ))  
+                    }
 
-                        <InputWithLabel  inputType={'text'} name={'lastname'} value={formValues.lastname} labelText={'Achternaam'} handleChange={updateFormValues}/>
-                    </div>
+                    {
+                        isSuccess && <p className={styles.successMessage}>De gegevens zijn succesvol aangepast.</p>
+                    }
 
-                    <InputWithLabel inputType={'email'} name={'email'} value={formValues.email} labelText={'E-mail'} handleChange={updateFormValues}/>
+                    {isUpdatePersonalDataPage? 
+                    <>
+                        <div className={styles.name}>
+                            <InputWithLabel inputType={'text'} name={'firstname'} value={formValues.firstname} labelText={'Voornaam'} handleChange={updateFormValues}/>
 
-                    <InputWithLabel inputType={'number'} name={'phoneNr'} value={formValues.phoneNr} labelText={'telefoon nummer'} handleChange={updateFormValues}/>
+                            <InputWithLabel  inputType={'text'} name={'lastname'} value={formValues.lastname} labelText={'Achternaam'} handleChange={updateFormValues}/>
+                        </div>
 
-                    <button className={styles.submitBtn}>Wijzigingen opslaan</button>
+                        <InputWithLabel inputType={'email'} name={'email'} value={formValues.email} labelText={'E-mail'} handleChange={updateFormValues}/>
 
-                </form>
-                : 
-                <form onSubmit={submitAgencyDataModifications}>
+                        <InputWithLabel inputType={'number'} name={'phoneNr'} value={formValues.phoneNr} labelText={'telefoon nummer'} handleChange={updateFormValues}/>
+                    </>
+                    :
+
+                    <>
                     <InputWithLabel inputType={'text'} name={'name'} value={formValues.name} labelText={'Naam'} handleChange={updateFormValues}/>
                     
                     <div className={styles.imageContainer}>
                         <label htmlFor="image">Afbeelding</label>
-                        <img src="https://ucarecdn.com/cb288972-b141-4509-94ac-02c4dbeb77da/109_1179703_1.jpg" alt="" />
+                        <img src={formValues.image} alt="" />
                         <input type="file" name="image" id="image" accept="image/*" />
                     </div>
                     
 
                     <InputWithLabel inputType={'email'} name={'email'} value={formValues.email} labelText={'E-mail'} handleChange={updateFormValues}/>
 
-                    <InputWithLabel inputType={'number'} name={'phoneNumber'} value={formValues.phoneNr} labelText={'telefoon nummer'} handleChange={updateFormValues}/>
+                    <InputWithLabel inputType={'number'} name={'phoneNr'} value={formValues.phoneNr} labelText={'telefoon nummer'} handleChange={updateFormValues}/>
+
+                    <InputWithLabel inputType={'text'} name={'street'} value={formValues.street} labelText={'Straat'} handleChange={updateFormValues}/>
+
+                    <InputWithLabel inputType={'number'} name={'number'} value={formValues.number} labelText={'Nummer'} handleChange={updateFormValues}/>
+
+                    <InputWithLabel inputType={'text'} name={'city'} value={formValues.city} labelText={'Stad'} handleChange={updateFormValues}/>
+
+                    <InputWithLabel inputType={'number'} name={'zipCode'} value={formValues.zipCode} labelText={'Postcode'} handleChange={updateFormValues}/>
+                    </>
+                    }
+
 
                     <button className={styles.submitBtn}>Wijzigingen opslaan</button>
 
                 </form>
-                }
                 
             </main>
         </div>

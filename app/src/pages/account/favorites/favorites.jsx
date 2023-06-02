@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './favorites.module.css';
 import DashboardAccountSidebar from '../../../components/Global/sidabars/dashboardAccountSidebar/dashboardAccountSidebar';
 import ROUTES from '../../../consts/routes';
@@ -7,10 +7,10 @@ import RealEstateCard from '../../../components/Global/cards/realEstateCard/real
 import SIDEBAR_NAV_ITEMS from '../../../consts/sidebarNavItems';
 import useFetch from '../../../hooks/useFetch';
 import Loading from "../../../components/Global/loading/loading"
+import { useAuthContext } from '../../../contexts/AuthContainer';
 
 function Favorites() {
 
-    const [favorites, setFavorites] = useState([]);
     const {
         isLoading,
         error,
@@ -18,18 +18,18 @@ function Favorites() {
         data
     } = useFetch(`/myFavorites`);
 
-    // Function to refetch favorites data
+    const {user} = useAuthContext();
+
+    const favorites = useMemo(() => data || [], [data]);
+
     const fetchFavorites = useCallback(() => {
         invalidate();
     }, [invalidate]);
 
     useEffect(() => {
-        if (data) {
-        setFavorites(data);
-        }
-    }, [data]);
+        fetchFavorites();
+    }, [fetchFavorites]);
 
-    console.log('err',error);
 
     if(isLoading){
         return <Loading/> 
@@ -48,37 +48,22 @@ function Favorites() {
                 <main className={styles.favoritesContainer}>
                     <h1>Favorieten</h1>
     
-                    <div className="px-8">
+                    <div>
                         {error ? 
                             <p>{error}</p>
                         : 
+                
                         <GridCards>
-
-                            {data.map(realEstate => (
-                                <RealEstateCard key={realEstate._id}
-                                realEstateData={{
-                                    price: realEstate.realEstate.price,
-                                    type: realEstate.realEstate.type,
-                                    sellingMethode: realEstate.realEstate.sellingMethode,
-                                    street: realEstate.location.street,
-                                    houseNr: realEstate.location.number,
-                                    zipCode: realEstate.location.zipCode,
-                                    city: realEstate.location.city,
-                                    measurements: realEstate.realEstate.livingArea,
-                                    bedrooms: realEstate.layout.numberOfBedrooms,
-                                    bathrooms: realEstate.layout.numberOfBathrooms,
-                                    imgUrl: realEstate.images[0],
-                                    unavailable: false,
-                                    propertyId: realEstate._id,
-                                    epcLabel: realEstate.energy.epc
-                                }}
-
-                                isLiked={true}
-                                isLoggedIn={true}
+                        {favorites.map((realEstateData) => (
+                            <RealEstateCard
+                                key={realEstateData._id}
+                                realEstateData={realEstateData}
+                                isLiked={false}
+                                isLoggedIn={user ? true : false}
                                 userStatus={'regular user'}
-        
                             />
                             ))}
+
                         </GridCards>
                         }
                         
